@@ -40,12 +40,12 @@ get '/commodities' do
 end
 
 get '/buy_orders' do
-  BuyOrder.order(price: :desc).to_json only: [:id, :phone, :amount, :price], include: :commodity
+  BuyOrder.order(price: :desc).to_json only: [:id, :phone, :amount, :price, :state], include: :commodity
 end
 
 get '/buy_orders/:id' do |id|
 	begin
-		BuyOrder.find(id).to_json only: [:id, :phone, :amount, :price], include: :commodity
+		BuyOrder.find(id).to_json only: [:id, :phone, :amount, :price, :state], include: :commodity
 	rescue ActiveRecord::RecordNotFound
 		halt 404, "Order not found!"
 	end
