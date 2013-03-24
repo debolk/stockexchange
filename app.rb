@@ -49,6 +49,19 @@ get '/commodities' do
   end
 end
 
+get '/commodities/:name' do |name|
+  begin
+    commodity = Commodity.where(:name => name).first!
+    if auth? admin: true
+      Commodity.all.to_json only: [:id, :name, :supply_rate, :supply_price], methods: :bar_price
+    else
+      Commodity.all.to_json only: [:id, :name], methods: :bar_price
+    end
+  rescue ActiveRecord::RecordNotFound
+    halt 404, "Commodity not found!"
+  end
+end
+
 get '/buy_orders' do
   BuyOrder.order(price: :desc).to_json only: [:id, :phone, :amount, :price, :state], include: :commodity
 end
