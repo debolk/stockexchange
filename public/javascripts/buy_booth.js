@@ -9,11 +9,16 @@ $(document).ready(function(){
     });
   });
   
-  // Load open orders
+  // Load orders
   $.getJSON('/buy_orders', function(buy_orders) {
     $(buy_orders).each(function() {
       var row = order_row(this);
-      $('table tbody').append(row);
+      if (this.state == 'matched') {
+        $('#matched_orders tbody').append(row);
+      }
+      else {
+        $('#open_orders tbody').append(row);
+      }
     });
   });
 
