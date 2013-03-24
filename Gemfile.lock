@@ -12,6 +12,8 @@ GEM
     activesupport (3.2.13)
       i18n (= 0.6.1)
       multi_json (~> 1.0)
+    acts_as_paranoid (0.4.1)
+      activerecord (~> 3.2)
     arel (3.0.2)
     bond (0.4.3)
     builder (3.0.4)
@@ -71,6 +73,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (~> 3.2.13)
+  acts_as_paranoid
   haml
   rake
   rspec

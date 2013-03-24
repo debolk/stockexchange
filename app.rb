@@ -1,6 +1,7 @@
 require 'bundler/setup'
 require 'sinatra'
 require "sinatra/activerecord"
+require 'acts_as_paranoid'
 require 'haml'
 
 ActiveRecord::Base.establish_connection(
@@ -10,6 +11,7 @@ ActiveRecord::Base.establish_connection(
 )
 
 require './models/buyorder.rb'
+require './models/sellorder.rb'
 require './models/commodity.rb'
 
 get '/' do
