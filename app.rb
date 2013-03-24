@@ -14,7 +14,10 @@ require './models/buyorder.rb'
 require './models/sellorder.rb'
 require './models/commodity.rb'
 
-get '/' do
-  @buy_orders = BuyOrder.all
-  haml :"buy_orders/index" 
+get '/commodities' do
+  Commodity.all.to_json only: [:id, :name], methods: :bar_price
+end
+
+get '/buy_orders' do
+  BuyOrder.order(price: :desc).to_json only: [:id, :phone, :amount, :price], include: :commodity
 end
