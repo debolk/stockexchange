@@ -24,19 +24,29 @@ helpers do
 		if request.query_string.empty?
 			halt 401, "Please add the correct token"
 		end
+    if not auth?(admin)
+  		halt 403, "Not authorized!"
+    end
+	end
+
+  def auth?(admin = false)
 		if request.query_string == settings.auth_admin
-			return
+			return true
 		end
 		if !admin && request.query_string == settings.auth_employee
-			return
+			return true
 		end
-		halt 403, "Not authorized!"
-	end
+    return false
+  end
 end
 
 # REST API
 get '/commodities' do
-  Commodity.all.to_json only: [:id, :name], methods: :bar_price
+  if auth? admin: true
+    Commodity.all.to_json only: [:id, :name, :supply_rate, :supply_price], methods: :bar_price
+  else
+    Commodity.all.to_json only: [:id, :name], methods: :bar_price
+  end
 end
 
 get '/buy_orders' do
@@ -93,7 +103,7 @@ post '/sell_orders' do
     order.seller = req["seller"]
     order.commodity = commodity
     order.save
-    redirect '/sell_orders/' + order.id.to_s
+    redirect '/sell_orders/' + order.id.to_s, 201
   rescue ActiveRecord::RecordNotFound
     halt 451, "Commodity not found"
   end 
@@ -111,7 +121,7 @@ post '/buy_orders' do
     order.phone = req["phone"]
     order.commodity = commodity
     order.save
-    redirect '/buy_orders/' + order.id.to_s
+    redirect '/buy_orders/' + order.id.to_s, 201
   rescue ActiveRecord::RecordNotFound
     halt 451, "Commodity not found"
   end 
@@ -127,7 +137,7 @@ put '/sell_orders/:id' do |id|
     order.price = req["price"]
     order.seller = req["seller"]
     order.save
-    redirect '/sell_orders/' + order.id.to_s
+    redirect '/sell_orders/' + order.id.to_s, 200
   rescue ActiveRecord::RecordNotFound
     halt 404, "Order not found!"
   end
@@ -143,7 +153,7 @@ put '/buy_orders/:id' do |id|
     order.price = req["price"]
     order.phone = req["phone"]
     order.save
-    redirect '/buy_orders/' + order.id.to_s
+    redirect '/buy_orders/' + order.id.to_s, 200
   rescue ActiveRecord::RecordNotFound
     halt 404, "Order not found!"
   end
@@ -160,7 +170,7 @@ put '/buy_orders/:id/payment' do |id|
   rescue ActiveRecord::RecordNotFound
     halt 404, "Order not found!"
   end
-  redirect '/buy_orders/' + id.to_s
+  redirect '/buy_orders/' + id.to_s, 200
 end
 
 # Interface
