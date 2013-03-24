@@ -21,3 +21,7 @@ end
 get '/buy_orders' do
   BuyOrder.order(price: :desc).to_json only: [:id, :phone, :amount, :price], include: :commodity
 end
+
+get '/sell_orders' do
+  SellOrder.order(price: :desc).to_json only: [:id, :phone, :amount, :price], include: :commodity
+end
