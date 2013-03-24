@@ -1,0 +1,45 @@
+%script{src: '/javascripts/buy_booth.js'}
+%h2 Buy Booth
+%h3 New order
+%form
+  %label
+    Commodity
+    %select#commodity{:name => "commodity"}
+  %label
+    Phone
+    %input.phone{type: 'text', name: 'phone', placeholder: '0612345678'}
+  %label
+    Amount
+    %input.number{type: 'text', name: 'amount', placeholder: '3'}
+  %label
+    Price
+    %input.number{type: 'text', name: 'price', placeholder: '120'}
+    in cents
+  %button{type: 'submit'} Place order
+
+%h3 Open orders
+%table 
+  %thead 
+    %tr 
+      %th 
+        %input#all{:type => "checkbox"}
+      %th ID
+      %th Phone
+      %th Commodity
+      %th.number Amount
+      %th.number Price
+      %th Actions
+  %tbody 
+
+%h3 Matched orders ready for pickup
+
+%script#order_row{type: 'text/x-handlebars-template'}
+  %tr
+    %td
+      %input{:type => "checkbox"}  
+    %td {{id}}
+    %td {{phone}}
+    %td {{commodity.name}}
+    %td.number {{amount}}
+    %td.number {{price}}
+    %td Edit | Destroy

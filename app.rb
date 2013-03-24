@@ -85,3 +85,7 @@ end
 get '/interface/bar' do
   haml :'interface/bar'
 end
+
+get '/interface/buy_booth' do
+	haml :'interface/buy_booth'
+end

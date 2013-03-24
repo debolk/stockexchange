@@ -22,10 +22,39 @@ header h1 {
 }
 
 /* Form */
+label {
+  margin-right: 1em;
+}
 input, select, button {
   font-size: x-large;
 }
 
 .number {
   width: 60px;
+}
+.phone {
+  width: 8em;
+}
+
+/* Table */
+table {
+  font-size: large;
+  border-spacing: 0;
+}
+
+thead {
+  color: white;
+  background-color: black;
+}
+td, th {
+  text-align: left;
+  padding: 0.2em 1em 0.2em 0;
+}
+
+tr:nth-child(2n) {
+  background-color: #bbb;
+}
+
+table .number {
+  text-align: right;
 }
