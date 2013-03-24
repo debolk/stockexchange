@@ -31,6 +31,9 @@ $(document).ready(function(){
   // Confirm action
   $('#matched_orders').on('click', '.confirm', function(event){
     event.preventDefault();
+    if (!confirm('Are you sure?')) {
+      return;
+    }
     var row = $(this).parents('tr');
     $.ajax({
       type: 'PUT',
