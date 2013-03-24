@@ -13,7 +13,6 @@ $(document).ready(function(){
   $.getJSON('/buy_orders', function(buy_orders) {
     $(buy_orders).each(function() {
       var row = order_row(this);
-      console.log(row)
       $('table tbody').append(row);
     });
   });
