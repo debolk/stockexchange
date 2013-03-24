@@ -45,8 +45,8 @@
       %th Actions
   %tbody 
 
-%script#order_row{type: 'text/x-handlebars-template'}
-  %tr
+%script#open_order{type: 'text/x-handlebars-template'}
+  %tr{'data-id' => '{{id}}'}
     %td
       %input{:type => "checkbox"}  
     %td {{id}}
@@ -54,4 +54,16 @@
     %td {{commodity.name}}
     %td.number {{amount}}
     %td.number {{money price}}
-    %td Edit | Destroy
+    %td Change | Destroy
+
+%script#matched_order{type: 'text/x-handlebars-template'}
+  %tr{'data-id' => '{{id}}'}
+    %td
+      %input{:type => "checkbox"}  
+    %td {{id}}
+    %td {{phone}}
+    %td {{commodity.name}}
+    %td.number {{amount}}
+    %td.number {{money price}}
+    %td 
+      %a.confirm{:href => '#'} Confirm 
