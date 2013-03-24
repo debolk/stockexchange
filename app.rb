@@ -12,8 +12,6 @@ ActiveRecord::Base.establish_connection(
 require './models/buyorder.rb'
 require './models/commodity.rb'
 
-
-
 get '/' do
   @buy_orders = BuyOrder.all
   haml :"buy_orders/index" 

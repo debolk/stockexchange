@@ -12,6 +12,7 @@ group :production do
 end
 
 group :development do
+  gem 'rspec'
   gem "shotgun", '~> 0.9.0'
   gem "tux", '~> 0.3.0'
 end
