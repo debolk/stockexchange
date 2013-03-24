@@ -81,6 +81,42 @@ delete '/buy_orders/:id' do |id|
 	end
 end
 
+post '/sell_orders' do
+  auth
+  req = ActiveSupport::JSON.decode(request.body)
+
+  begin
+    commodity = Commodity.where(:name => req["commodity"]).first!
+    order = SellOrder.new
+    order.amount = req["amount"]
+    order.price = req["price"]
+    order.seller = req["seller"]
+    order.commodity = commodity
+    order.save
+    redirect '/sell_orders/' + order.id.to_s
+  rescue ActiveRecord::RecordNotFound
+    halt 451, "Commodity not found"
+  end 
+end
+
+post '/buy_orders' do
+  auth
+  req = ActiveSupport::JSON.decode(request.body)
+
+  begin
+    commodity = Commodity.where(:name => req["commodity"]).first!
+    order = BuyOrder.new
+    order.amount = req["amount"]
+    order.price = req["price"]
+    order.phone = req["phone"]
+    order.commodity = commodity
+    order.save
+    redirect '/buy_orders/' + order.id.to_s
+  rescue ActiveRecord::RecordNotFound
+    halt 451, "Commodity not found"
+  end 
+end
+  
 # Interface
 get '/interface/bar' do
   haml :'interface/bar'

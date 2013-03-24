@@ -73,6 +73,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (~> 3.2.13)
+  activesupport
   acts_as_paranoid
   haml
   rake
