@@ -10,6 +10,7 @@ ActiveRecord::Base.establish_connection(
   host:     'localhost',
 )
 
+# SETTINGS
 set :auth_employee, '214E7DD41B7C823DF963'
 set :auth_admin,    '110F4B0BDF366C453723'
 
@@ -32,6 +33,7 @@ helpers do
 	end
 end
 
+# REST API
 get '/commodities' do
   Commodity.all.to_json only: [:id, :name], methods: :bar_price
 end
@@ -76,4 +78,9 @@ delete '/buy_orders/:id' do |id|
 	rescue ActiveRecord::RecordNotFound
 		halt 404, "Order not found!"
 	end
+end
+
+# Interface
+get '/interface/bar' do
+  haml :'interface/bar'
 end
