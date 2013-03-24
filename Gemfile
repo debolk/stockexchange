@@ -7,6 +7,7 @@ gem "sinatra-activerecord", '~> 1.2.2'
 gem 'rake'
 gem 'haml'
 gem 'acts_as_paranoid'
+gem 'activesupport'
 
 group :production do
   gem 'thin', '~> 1.5.0'
