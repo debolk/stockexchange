@@ -1,7 +1,7 @@
 /* Page structure */
 html {
   font-family: 'Helvetica Neue Condensed','Helvetica','Arial',sans-serif;
-  font-size: large;
+  font-size: x-large;
 }
 body {
   margin: 0;
@@ -15,4 +15,17 @@ header {
 
 header h1 {
   margin: 0;
+}
+
+.content {
+  margin: 1em;
+}
+
+/* Form */
+input, select, button {
+  font-size: x-large;
+}
+
+.number {
+  width: 60px;
 }

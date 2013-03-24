@@ -9,6 +9,7 @@ ActiveRecord::Base.establish_connection(
   database: 'exchange.db',
   host:     'localhost',
 )
+ActiveRecord::Base.include_root_in_json = false
 
 # SETTINGS
 set :auth_employee, '214E7DD41B7C823DF963'
