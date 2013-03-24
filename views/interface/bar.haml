@@ -1,2 +1,17 @@
-%h2 Bar
-%p Nothing here yet...
+%h2 Bar interface
+%form
+  %p
+    %label
+      Commodity
+      %select#commodity{:name => "commodity"}
+  %p
+    %label
+      Price
+      %input.number{type: 'text', name: 'price', placeholder: '340'} in cents
+  %p
+    %label
+      Speed
+      %input.number{type: 'text', name: 'speed', placeholder: '3'}
+      per second
+  %p
+    %button{type: 'submit'} Set supply
