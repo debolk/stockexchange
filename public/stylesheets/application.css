@@ -58,3 +58,11 @@ tr:nth-child(2n) {
 table .number {
   text-align: right;
 }
+
+/* Footer */
+footer {
+  font-size: medium;
+  color: white;
+  padding: 1em;
+  background-color: black;
+}
