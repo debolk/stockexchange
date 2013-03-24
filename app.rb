@@ -1,6 +1,7 @@
 require 'bundler/setup'
 require 'sinatra'
 require "sinatra/activerecord"
+require 'haml'
 
 ActiveRecord::Base.establish_connection(
   adapter:  'sqlite3',
@@ -14,5 +15,6 @@ require './models/commodity.rb'
 
 
 get '/' do
-  'Hello World!'  
+  @buy_orders = BuyOrder.all
+  haml :"buy_orders/index" 
 end
