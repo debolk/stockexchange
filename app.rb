@@ -149,6 +149,20 @@ put '/buy_orders/:id' do |id|
   end
 end
 
+put '/buy_orders/:id/payment' do |id|
+  auth
+  begin
+    order = BuyOrder.find(id)
+    if order.state == "open"
+      order.state = :paid
+      order.save
+    end
+  rescue ActiveRecord::RecordNotFound
+    halt 404, "Order not found!"
+  end
+  redirect '/buy_orders/' + id.to_s
+end
+
 # Interface
 get '/interface/bar' do
   haml :'interface/bar'
