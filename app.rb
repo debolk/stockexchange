@@ -10,9 +10,27 @@ ActiveRecord::Base.establish_connection(
   host:     'localhost',
 )
 
+set :auth_employee, '214E7DD41B7C823DF963'
+set :auth_admin,    '110F4B0BDF366C453723'
+
 require './models/buyorder.rb'
 require './models/sellorder.rb'
 require './models/commodity.rb'
+
+helpers do
+	def auth(admin = false)
+		if request.query_string.empty?
+			halt 401, "Please add the correct token"
+		end
+		if request.query_string == settings.auth_admin
+			return
+		end
+		if !admin && request.query_string == settings.auth_employee
+			return
+		end
+		halt 403, "Not authorized!"
+	end
+end
 
 get '/commodities' do
   Commodity.all.to_json only: [:id, :name], methods: :bar_price
@@ -37,6 +55,24 @@ end
 get '/sell_orders/:id' do |id|
 	begin
 		SellOrder.find(id).to_json only: [:id, :phone, :amount, :price], include: :commodity
+	rescue ActiveRecord::RecordNotFound
+		halt 404, "Order not found!"
+	end
+end
+
+delete '/sell_orders/:id' do |id|
+	auth
+	begin
+		SellOrder.find(id).destroy
+	rescue ActiveRecord::RecordNotFound
+		halt 404, "Order not found!"
+	end
+end
+
+delete '/buy_orders/:id' do |id|
+	auth
+	begin
+		BuyOrder.find(id).destroy
 	rescue ActiveRecord::RecordNotFound
 		halt 404, "Order not found!"
 	end
