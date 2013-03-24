@@ -14,6 +14,7 @@ require './models/buyorder.rb'
 require './models/sellorder.rb'
 require './models/commodity.rb'
 
+# REST API
 get '/commodities' do
   Commodity.all.to_json only: [:id, :name], methods: :bar_price
 end
@@ -40,4 +41,9 @@ get '/sell_orders/:id' do |id|
 	rescue ActiveRecord::RecordNotFound
 		halt 404, "Order not found!"
 	end
+end
+
+# Interface
+get '/interface/bar' do
+  haml :'interface/bar'
 end

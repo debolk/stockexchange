@@ -1,0 +1,18 @@
+/* Page structure */
+html {
+  font-family: 'Helvetica Neue Condensed','Helvetica','Arial',sans-serif;
+  font-size: large;
+}
+body {
+  margin: 0;
+}
+
+header {
+  color: white;
+  background-color: black;
+  padding: 1em;
+}
+
+header h1 {
+  margin: 0;
+}
