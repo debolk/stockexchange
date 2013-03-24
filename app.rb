@@ -153,7 +153,7 @@ put '/buy_orders/:id/payment' do |id|
   auth
   begin
     order = BuyOrder.find(id)
-    if order.state == "open"
+    if order.state == "matched"
       order.state = :paid
       order.save
     end
