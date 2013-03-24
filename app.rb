@@ -116,7 +116,39 @@ post '/buy_orders' do
     halt 451, "Commodity not found"
   end 
 end
-  
+
+put '/sell_orders/:id' do |id|
+  auth
+  req = ActiveSupport::JSON.decode(request.body)
+
+  begin
+    order = SellOrder.find(id)
+    order.amount = req["amount"]
+    order.price = req["price"]
+    order.seller = req["seller"]
+    order.save
+    redirect '/sell_orders/' + order.id.to_s
+  rescue ActiveRecord::RecordNotFound
+    halt 404, "Order not found!"
+  end
+end
+ 
+put '/buy_orders/:id' do |id|
+  auth
+  req = ActiveSupport::JSON.decode(request.body)
+
+  begin
+    order = BuyOrder.find(id)
+    order.amount = req["amount"]
+    order.price = req["price"]
+    order.phone = req["phone"]
+    order.save
+    redirect '/buy_orders/' + order.id.to_s
+  rescue ActiveRecord::RecordNotFound
+    halt 404, "Order not found!"
+  end
+end
+
 # Interface
 get '/interface/bar' do
   haml :'interface/bar'
