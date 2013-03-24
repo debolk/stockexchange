@@ -17,4 +17,10 @@ $(document).ready(function(){
       $('table tbody').append(row);
     });
   });
+
+  // Select all checkbox
+  $('input.all').on('click', function(){
+    var table = $(this).parents('table');
+    $('tbody input[type="checkbox"]', table).prop('checked', $(this).is(':checked'));
+  });
 });
