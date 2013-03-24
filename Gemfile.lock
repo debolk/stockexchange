@@ -24,6 +24,7 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    rake (10.0.3)
     ripl (0.7.0)
       bond (~> 0.4.2)
     ripl-multi_line (0.3.0)
@@ -59,6 +60,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (~> 3.2.13)
+  rake
   shotgun (~> 0.9.0)
   sinatra (~> 1.4.0)
   sinatra-activerecord (~> 1.2.2)
