@@ -113,15 +113,16 @@ post '/sell_orders' do
 
   begin
     commodity = Commodity.where(:name => req["commodity"]).first!
-    order = SellOrder.new
-    order.amount = req["amount"]
-    order.price = req["price"]
-    order.seller = req["seller"]
-    order.commodity = commodity
-    unless order.save
-      halt 412, order.errors.full_messages
+    req['amount'].times do
+      order = SellOrder.new
+      order.price = req["price"]
+      order.seller = req["seller"]
+      order.commodity = commodity
+      unless order.save
+        halt 412, order.errors.full_messages
+      end
     end
-    redirect '/sell_orders/' + order.id.to_s, 303
+    halt 201
   rescue ActiveRecord::RecordNotFound
     halt 412, "Commodity not found"
   end 
