@@ -9,8 +9,6 @@ $(document).ready(function(){
     error: function(jqXHR, textStatus, errorThrown) {
       StockExchange.addAlert('error', jqXHR.responseText);
     },
-    contentType: 'json',
-    dataType: 'json',
   });
 
   // Global object for logic and stuffz
@@ -18,7 +16,10 @@ $(document).ready(function(){
     clearAlerts: function() {
       $('.alerts').empty()
     },
-    addAlert: function(type, text) {
+    addAlert: function(type, text, remove_previous = false) {
+      if (remove_previous) {
+        this.clearAlerts();
+      }
       $('<div>').addClass('alert alert-'+type).html(text).appendTo('.alerts')
     },
   };

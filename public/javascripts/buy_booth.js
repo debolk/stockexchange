@@ -41,8 +41,7 @@ $(document).ready(function(){
       contentType: 'application/json',
       success: function(result){
         row.remove();
-        message = $('<div>').addClass('alert alert-success').html('Order confirmed');
-        $('#matched_orders').before(message);
+        StockExchange.addAlert('success', 'Buy order confirmed', true);
       },
       error: function() {
         alert('Something went wrong. Please try again or reload');
@@ -59,10 +58,33 @@ $(document).ready(function(){
       price: $('[name="price"]').val(),
       phone: $('[name="phone"]').val(),
     }
-    $.post('/buy_orders?214E7DD41B7C823DF963', JSON.stringify(data), function(result) {
-      StockExchange.clearAlerts(); // Hide alerts
-      StockExchange.addAlert('success', 'Buy order added');
-      $('#open_orders tbody').append(open_order(result)); // Append to body
+    $.ajax({
+      method: 'POST',
+      url: '/buy_orders?214E7DD41B7C823DF963', 
+      data: JSON.stringify(data), 
+      success: function(result) {
+        StockExchange.addAlert('success', 'Buy order added', true);
+        $('#open_orders tbody').append(open_order(result)); // Append to body
+      },
+      contentType: 'json',
+      dataType: 'json',
+    });
+  });
+
+  // Destroy order
+  $('.orders').on('click', '.destroy', function(event){
+    event.preventDefault();
+    if (!confirm('Are you sure?')) {
+      return;
+    }
+    var row = $(this).parents('tr');
+    $.ajax({
+      type: 'DELETE',
+      url: '/buy_orders/'+row.attr('data-id')+'?214E7DD41B7C823DF963',
+      success: function(){
+        StockExchange.addAlert('success', 'Order removed', true);
+        row.remove();
+      },
     });
   });
 });
