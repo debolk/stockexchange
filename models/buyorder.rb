@@ -7,6 +7,8 @@ class BuyOrder < ActiveRecord::Base
   validates :price, presence: true, numericality: true
   validates :commodity, presence: true
 
+  validates_uniqueness_of :commodity_id, :scope => :phone
+
   def commodity_name
     commodity.name
   end
