@@ -115,7 +115,9 @@ post '/sell_orders' do
     order.price = req["price"]
     order.seller = req["seller"]
     order.commodity = commodity
-    order.save
+    unless order.save
+      halt 412, order.errors.full_messages
+    end
     redirect '/sell_orders/' + order.id.to_s, 303
   rescue ActiveRecord::RecordNotFound
     halt 412, "Commodity not found"
@@ -133,7 +135,9 @@ post '/buy_orders' do
     order.price = req["price"]
     order.phone = req["phone"]
     order.commodity = commodity
-    order.save
+    unless order.save
+      halt 412, order.errors.full_messages
+    end
     redirect '/buy_orders/' + order.id.to_s, 303
   rescue ActiveRecord::RecordNotFound
     halt 412, "Commodity not found"
@@ -188,9 +192,11 @@ end
 
 # Interface
 get '/interface/bar' do
+  auth true
   haml :'interface/bar'
 end
 
 get '/interface/buy_booth' do
+  auth
 	haml :'interface/buy_booth'
 end
