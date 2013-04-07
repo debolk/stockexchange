@@ -5,6 +5,7 @@ html {
 }
 body {
   margin: 0;
+  background-color: black;
 }
 
 header {
@@ -17,8 +18,13 @@ header h1 {
   margin: 0;
 }
 
-.content {
-  margin: 1em;
+section {
+  padding: 1em;
+  background-color: white;
+}
+
+section h2 {
+  margin-top: 0;
 }
 
 /* Form */
