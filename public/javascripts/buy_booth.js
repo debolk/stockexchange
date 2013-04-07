@@ -6,7 +6,7 @@ $(document).ready(function(){
   // Load commodities
   $.getJSON('/commodities', function(commodities) {
     $(commodities).each(function(){
-      $('<option>').val(this.id).html(this.name).appendTo('#commodity');
+      $('<option>').val(this.name).html(this.name).appendTo('#commodity');
     });
   });
   
@@ -47,6 +47,22 @@ $(document).ready(function(){
       error: function() {
         alert('Something went wrong. Please try again or reload');
       },
+    });
+  });
+
+  // Submit form
+  $('form').on('submit', function(event){
+    event.preventDefault();
+    var data = {
+      commodity: $('[name="commodity"]').val(),
+      amount: $('[name="amount"]').val(),
+      price: $('[name="price"]').val(),
+      phone: $('[name="phone"]').val(),
+    }
+    $.post('/buy_orders?214E7DD41B7C823DF963', JSON.stringify(data), function(result) {
+      StockExchange.clearAlerts(); // Hide alerts
+      StockExchange.addAlert('success', 'Buy order added');
+      $('#open_orders tbody').append(open_order(result)); // Append to body
     });
   });
 });
