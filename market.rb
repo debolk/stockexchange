@@ -5,18 +5,17 @@ print 'Starting market interface servers...'
 system 'thin start > /dev/null &'
 puts 'done'
 
-print 'Loading market software...'
-class Market
-end
-market = Market.new
-puts 'done'
-
 print 'Initializing market heartbeat...'
 threads = []
-threads << Thread.new do
-  while true
-    puts 'beep'
-    sleep 1
+semaphore = Mutex.new
+Commodity.all.each do |commodity|
+  threads << Thread.new(commodity.name) do |name|
+    while true
+      semaphore.synchronize {
+        puts name
+      }
+      sleep 1
+    end
   end
 end
 puts 'done'
@@ -24,3 +23,6 @@ puts 'done'
 puts 'GONG! Markets are open'
 puts ''
 threads.each { |thr| thr.join }
+while true
+  sleep 1
+end
