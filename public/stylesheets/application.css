@@ -30,6 +30,8 @@ section h2 {
 /* Form */
 label {
   margin-right: 1em;
+  display: inline-block;
+  min-width: 150px;
 }
 input, select, button {
   font-size: x-large;
@@ -40,6 +42,13 @@ input, select, button {
 }
 .phone {
   width: 8em;
+}
+
+[type="submit"] {
+  padding: 0.2em;
+  width: 7em;
+  font-weight: bold;
+  font-size: 150%;
 }
 
 /* Table */
