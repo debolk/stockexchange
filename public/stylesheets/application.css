@@ -92,3 +92,29 @@ footer {
     border-color: #EED3D7;
     color: #B94A48;
 }
+
+/* Bar interface */
+#commodities {
+    height: 250px;
+}
+
+#commodities .commodity {
+    float: left;
+    margin-right: 40px;
+}
+
+#commodities .commodity .row {
+    float: none;
+    clear: right;
+    display: block;
+    height: 50px;
+}
+
+#commodities .commodity label.row {
+    padding-top: 5px;
+    margin-bottom: -5px;
+}
+
+#commodities .commodity .row h3 {
+    margin: 0;
+}
