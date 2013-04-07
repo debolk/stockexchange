@@ -1,23 +1,9 @@
-require 'bundler/setup'
-require 'sinatra'
-require "sinatra/activerecord"
-require 'acts_as_paranoid'
-require 'haml'
-
-ActiveRecord::Base.establish_connection(
-  adapter:  'sqlite3',
-  database: 'exchange.db',
-  host:     'localhost',
-)
-ActiveRecord::Base.include_root_in_json = false
+require './setup'
 
 # SETTINGS
 set :auth_employee, '214E7DD41B7C823DF963'
 set :auth_admin,    '110F4B0BDF366C453723'
 
-require './models/buyorder.rb'
-require './models/sellorder.rb'
-require './models/commodity.rb'
 
 helpers do
 	def auth(admin = false)
