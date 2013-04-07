@@ -1,7 +1,7 @@
 require 'net/http'
 
-class Sms
-  def self.Notify(to, message)
+class SMS
+  def self.notify(to, message)
     http = Net::HTTP.new('www.budgetsms.net', 80);
     m = self.urlencode(message);
     request = Net::HTTP::Post.new('/api/sendsms_utf8/?username=thexa4&userid=9549&handle=d6c7667bf145fe30ce5eb59915503558&from=De%20Bolk&message=' + m);
