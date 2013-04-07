@@ -116,7 +116,7 @@ post '/sell_orders' do
     order.seller = req["seller"]
     order.commodity = commodity
     order.save
-    redirect '/sell_orders/' + order.id.to_s, 201
+    redirect '/sell_orders/' + order.id.to_s, 303
   rescue ActiveRecord::RecordNotFound
     halt 451, "Commodity not found"
   end 
@@ -134,7 +134,7 @@ post '/buy_orders' do
     order.phone = req["phone"]
     order.commodity = commodity
     order.save
-    redirect '/buy_orders/' + order.id.to_s, 201
+    redirect '/buy_orders/' + order.id.to_s, 303
   rescue ActiveRecord::RecordNotFound
     halt 451, "Commodity not found"
   end 
