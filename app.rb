@@ -196,6 +196,22 @@ put '/buy_orders/:id/payment' do |id|
   redirect '/buy_orders/' + id.to_s, 200
 end
 
+put '/commodities/:name' do |name|
+  auth true
+  req = ActiveSupport::JSON.decode(request.body)
+
+  begin
+    commodity = Commodity.where(:name => name).first!
+    commodity.supply_rate = req["supply_rate"]
+    commodity.supply_price = req["supply_price"]
+    unless commodity.save
+      halt 412, commodity.errors.full_messages
+    end
+  rescue ActiveRecord::RecordNotFound
+    halt 404, "Commodity not found!"
+  end
+end
+
 # Interface
 get '/interface/bar' do
   auth true
