@@ -18,7 +18,7 @@
   %button{type: 'submit'} Place order
 
 %h3 Open orders
-%table#open_orders
+%table#open_orders.orders
   %thead 
     %tr 
       %th 
@@ -32,7 +32,7 @@
   %tbody 
 
 %h3 Matched orders ready for pickup
-%table#matched_orders
+%table#matched_orders.orders
   %thead 
     %tr 
       %th 
@@ -54,7 +54,9 @@
     %td {{commodity.name}}
     %td.number {{amount}}
     %td.number {{money price}}
-    %td Change | Destroy
+    %td 
+      %a.destroy{href: '#'} Destroy
+      | Change
 
 %script#matched_order{type: 'text/x-handlebars-template'}
   %tr{'data-id' => '{{id}}'}
@@ -67,3 +69,5 @@
     %td.number {{money price}}
     %td 
       %a.confirm{:href => '#'} Confirm 
+      |
+      %a.destroy{href: '#'} Destroy
