@@ -44,11 +44,11 @@ helpers do
   end
 
   def match!
-    BuyOrder.all.order(:price, :desc).each do |buy_order|
-      sell_orders = SellOrder.order(:price, :desc).where('price <= ?', buy_order.price).limit(buy_order.amount)
+    BuyOrder.order(price: :desc).each do |buy_order|
+      sell_orders = SellOrder.order(price: :desc).where('price <= ?', buy_order.price).limit(buy_order.amount)
       if sell_orders.count == buy_order.amount
         buy_order.update_attribute :state, :matched
-        sell_orders.update_all :state, :matched
+        sell_orders.update_all state: :matched
       end
     end
   end
@@ -86,7 +86,7 @@ get '/commodities/:name/propose' do |name|
     left -= buy_order.amount
   end
   total += left*commodity.buyback_price
-  halt 200, total.to_sfa
+  halt 200, total.to_s
 end
 
 get '/buy_orders' do
@@ -137,7 +137,7 @@ post '/sell_orders' do
 
   begin
     commodity = Commodity.where(:name => req["commodity"]).first!
-    req['amount'].times do
+    req['amount'].to_i.times do
       order = SellOrder.new
       order.price = req["price"]
       order.seller = req["seller"]

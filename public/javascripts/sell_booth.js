@@ -28,4 +28,24 @@ $(document).ready(function(){
       });
     }
   }
+
+  // Sell coins
+  $('form').on('submit', function(event){
+    event.preventDefault();
+    var commodity = $('[name="commodity"]').val();
+    var amount = $('[name="amount"]').val();
+    var price = $('[name="price"]').val();
+    if (amount.trim() != '' && price.trim() != '') {
+      $.ajax({
+        type: 'POST',
+        url: '/sell_orders?214E7DD41B7C823DF963',
+        data: JSON.stringify({commodity: commodity, amount: amount, price: price}),
+        contentType: 'application/json',
+        success: function(result){
+          StockExchange.addAlert('success', 'Order created', true)
+          $('input', 'form').val('');
+        },
+      });
+    }
+  });
 });
