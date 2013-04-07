@@ -19,10 +19,11 @@ log 'done'
 
 log 'Initializing market heartbeat...', false
 Commodity.all.each do |commodity|
-  @@threads << Thread.new(commodity.name) do |name|
+  @@threads << Thread.new(commodity) do |commodity|
     while true
-      log name
-      sleep 1
+      commodity.reload
+      SellOrder.create(commodity: commodity, seller: 'bar', amount: commodity.price)
+      sleep(60/commodity.supply_rate)
     end
   end
 end
