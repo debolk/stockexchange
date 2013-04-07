@@ -1,0 +1,30 @@
+%script{src: '/javascripts/barman.js'}
+%h2 Barman interface
+%p
+  Use the key-combination after each field to highlight or use that field.
+  Use numbers 1-9 to input values
+  Use Control + Enter to confirm
+
+%table#commodities
+  %thead
+    %tr
+      %th Commodity
+      %th Bar price
+      %th Amount
+      %th Focus
+  %tbody
+  %tfoot
+    %tr
+      %td{colspan: 2} &nbsp;
+      %td Total price
+      %td
+        &euro;
+        %span.total 
+  
+%script#commodity{type: 'text/x-handlebars-template'}
+  %tr{'data-id' => '{{id}}'}
+    %td {{name}}
+    %td{'data-value' => '{{bar_price}}', class: 'price'} {{money bar_price}}
+    %td
+      %input{type: :text, value: 0, class: :amount}
+    %td Control + {{number}}

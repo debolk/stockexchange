@@ -259,3 +259,8 @@ get '/interface/sell_booth' do
   auth
   haml :'interface/sell_booth'
 end
+
+get '/interface/barman' do
+  auth
+  haml :'interface/barman'
+end

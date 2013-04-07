@@ -57,7 +57,7 @@ table {
   border-spacing: 0;
 }
 
-thead {
+thead, tfoot {
   color: white;
   background-color: black;
 }
