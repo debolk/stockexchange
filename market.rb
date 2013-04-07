@@ -1,8 +1,7 @@
-# Starts all services required
 require './setup'
+
+# Logging
 @@semaphore = Mutex.new
-@@threads = []
-# Utility functions
 def self.log(text, new_line = true)
   @@semaphore.synchronize do
     if new_line
@@ -13,11 +12,14 @@ def self.log(text, new_line = true)
   end
 end
 
+# Interface servers
 log 'Starting market interface servers...', false
 system 'thin start > /dev/null &'
 log 'done'
 
+# Threads to update market
 log 'Initializing market heartbeat...', false
+@@threads = []
 Commodity.all.each do |commodity|
   @@threads << Thread.new(commodity) do |commodity|
     while true
@@ -30,5 +32,6 @@ end
 log 'done'
 @@threads.each { |thr| thr.join }
 
+# All done
 log 'GONG! Markets are open'
 
