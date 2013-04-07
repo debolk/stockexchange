@@ -38,7 +38,7 @@ input, select, button {
 }
 
 .number {
-  width: 60px;
+  width: 80px;
 }
 .phone {
   width: 8em;
@@ -80,6 +80,10 @@ footer {
   color: white;
   padding: 1em;
   background-color: black;
+}
+
+footer .secret {
+  color: #111;
 }
 
 /* Alerts */
