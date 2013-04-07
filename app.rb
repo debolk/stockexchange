@@ -245,9 +245,9 @@ put '/commodities/:name' do |name|
 end
 
 # Interface
-get '/interface/bar' do
+get '/interface/barcom' do
   auth true
-  haml :'interface/bar'
+  haml :'interface/barcom'
 end
 
 get '/interface/buy_booth' do
