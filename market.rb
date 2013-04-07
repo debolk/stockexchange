@@ -1,5 +1,3 @@
-require './setup'
-
 # Logging
 @@semaphore = Mutex.new
 def self.log(text, new_line = true)
