@@ -42,6 +42,16 @@ helpers do
 		end
     return false
   end
+
+  def match!
+    BuyOrder.all.order(:price, :desc).each do |buy_order|
+      sell_orders = SellOrder.order(:price, :desc).where('price <= ?', buy_order.price).limit(buy_order.amount)
+      if sell_orders.count == buy_order.amount
+        buy_order.update_attribute :state, :matched
+        sell_orders.update_all :state, :matched
+      end
+    end
+  end
 end
 
 # REST API
@@ -114,15 +124,17 @@ post '/sell_orders' do
 
   begin
     commodity = Commodity.where(:name => req["commodity"]).first!
-    order = SellOrder.new
-    order.amount = req["amount"]
-    order.price = req["price"]
-    order.seller = req["seller"]
-    order.commodity = commodity
-    unless order.save
-      halt 412, order.errors.full_messages
+    req['amount'].times do
+      order = SellOrder.new
+      order.price = req["price"]
+      order.seller = req["seller"]
+      order.commodity = commodity
+      unless order.save
+        halt 412, order.errors.full_messages
+      end
     end
-    redirect '/sell_orders/' + order.id.to_s, 303
+    match!
+    halt 201
   rescue ActiveRecord::RecordNotFound
     halt 412, "Commodity not found"
   end 
@@ -142,6 +154,7 @@ post '/buy_orders' do
     unless order.save
       halt 412, order.errors.full_messages
     end
+    match!
     redirect '/buy_orders/' + order.id.to_s, 303
   rescue ActiveRecord::RecordNotFound
     halt 412, "Commodity not found"
@@ -160,6 +173,7 @@ put '/sell_orders/:id' do |id|
     unless order.save
       halt 412, order.errors.full_messages
     end
+    match!
     redirect '/sell_orders/' + order.id.to_s, 200
   rescue ActiveRecord::RecordNotFound
     halt 404, "Order not found!"
@@ -178,6 +192,7 @@ put '/buy_orders/:id' do |id|
     unless order.save
       halt 412, order.errors.full_messages
     end
+    match!
     redirect '/buy_orders/' + order.id.to_s, 200
   rescue ActiveRecord::RecordNotFound
     halt 404, "Order not found!"
