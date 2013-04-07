@@ -118,7 +118,7 @@ post '/sell_orders' do
     order.save
     redirect '/sell_orders/' + order.id.to_s, 303
   rescue ActiveRecord::RecordNotFound
-    halt 451, "Commodity not found"
+    halt 412, "Commodity not found"
   end 
 end
 
@@ -136,7 +136,7 @@ post '/buy_orders' do
     order.save
     redirect '/buy_orders/' + order.id.to_s, 303
   rescue ActiveRecord::RecordNotFound
-    halt 451, "Commodity not found"
+    halt 412, "Commodity not found"
   end 
 end
 
