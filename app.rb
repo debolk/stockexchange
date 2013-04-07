@@ -153,7 +153,9 @@ put '/sell_orders/:id' do |id|
     order.amount = req["amount"]
     order.price = req["price"]
     order.seller = req["seller"]
-    order.save
+    unless order.save
+      halt 412, order.errors.full_messages
+    end
     redirect '/sell_orders/' + order.id.to_s, 200
   rescue ActiveRecord::RecordNotFound
     halt 404, "Order not found!"
@@ -169,7 +171,9 @@ put '/buy_orders/:id' do |id|
     order.amount = req["amount"]
     order.price = req["price"]
     order.phone = req["phone"]
-    order.save
+    unless order.save
+      halt 412, order.errors.full_messages
+    end
     redirect '/buy_orders/' + order.id.to_s, 200
   rescue ActiveRecord::RecordNotFound
     halt 404, "Order not found!"
@@ -182,7 +186,9 @@ put '/buy_orders/:id/payment' do |id|
     order = BuyOrder.find(id)
     if order.state == "matched"
       order.state = :paid
-      order.save
+      unless order.save
+        halt 412, order.errors.full_messages
+      end
     end
   rescue ActiveRecord::RecordNotFound
     halt 404, "Order not found!"
