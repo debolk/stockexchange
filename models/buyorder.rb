@@ -12,4 +12,8 @@ class BuyOrder < ActiveRecord::Base
   def commodity_name
     commodity.name
   end
+
+  def total_value
+    price*amount
+  end
 end

@@ -75,6 +75,19 @@ get '/commodities/:name' do |name|
   end
 end
 
+get '/commodities/:name/propose' do |name|
+  commodity = Commodity.where(:name => name).first!
+  total = 0
+  left = params[:amount].to_i
+  BuyOrder.order(price: :desc).each do |buy_order|
+    break if buy_order.amount > left
+    total += buy_order.total_value
+    left -= buy_order.amount
+  end
+  total += left*commodity.buyback_price
+  halt 200, total.to_sfa
+end
+
 get '/buy_orders' do
   BuyOrder.order(price: :desc).to_json only: [:id, :phone, :amount, :price, :state], include: :commodity
 end
@@ -239,4 +252,9 @@ end
 get '/interface/buy_booth' do
   auth
 	haml :'interface/buy_booth'
+end
+
+get '/interface/sell_booth' do
+  auth
+  haml :'interface/sell_booth'
 end

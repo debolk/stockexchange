@@ -1,0 +1,17 @@
+%script{src: '/javascripts/sell_booth.js'}
+%h2 Sell Booth
+%form
+  %p
+    %label Commodity
+    %select#commodity{:name => "commodity"}
+  %p
+    %label Amount
+    %input.number{type: 'text', name: 'amount', placeholder: '3'}
+  %p
+    %label Price per coin
+    %input.number{type: 'text', name: 'price', disabled: true}
+  %p
+    %label Price total
+    %input.number{type: 'text', name: 'total', disabled: true}
+  %p
+    %button{type: 'submit'} Sell
