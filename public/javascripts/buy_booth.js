@@ -41,8 +41,7 @@ $(document).ready(function(){
       contentType: 'application/json',
       success: function(result){
         row.remove();
-        message = $('<div>').addClass('alert alert-success').html('Order confirmed');
-        $('#matched_orders').before(message);
+        StockExchange.addAlert('success', 'Buy order confirmed', true);
       },
       error: function() {
         alert('Something went wrong. Please try again or reload');
