@@ -4,6 +4,7 @@ require 'haml'
 require 'sinatra'
 require "sinatra/activerecord"
 require 'acts_as_paranoid'
+require './sms.rb'
 
 ActiveRecord::Base.establish_connection(
   adapter:  'sqlite3',
