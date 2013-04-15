@@ -244,6 +244,12 @@ put '/commodities/:name' do |name|
   end
 end
 
+post '/bar_sales' do
+  auth
+  # for each commodity
+    # log the specified amount as sold
+end
+
 # Interface
 get '/interface/barcom' do
   auth true
