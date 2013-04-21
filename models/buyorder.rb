@@ -6,8 +6,7 @@ class BuyOrder < ActiveRecord::Base
   validates :amount, presence: true, numericality: true
   validates :price, presence: true, numericality: true
   validates :commodity, presence: true
-
-  validates_uniqueness_of :commodity_id, :scope => :phone
+  validates_uniqueness_of :commodity_id, :scope => :phone, :unless => Proc.new {|bo| bo.state == :matched}
 
   def commodity_name
     commodity.name

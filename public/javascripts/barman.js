@@ -35,24 +35,41 @@ $(document).ready(function(){
   // Submit form
   $('form').on('submit', function(event){
     event.preventDefault();
-    alert('To be implemented!');
-    // var data = {
-    //   commodity: $('[name="commodity"]').val(),
-    //   amount: $('[name="amount"]').val(),
-    //   price: $('[name="price"]').val(),
-    //   phone: $('[name="phone"]').val(),
-    // }
-    // $.ajax({
-    //   method: 'POST',
-    //   url: '/buy_orders?214E7DD41B7C823DF963', 
-    //   data: JSON.stringify(data), 
-    //   success: function(result) {
-    //     StockExchange.addAlert('success', 'Buy order added', true);
-    //     $('#open_orders tbody').append(open_order(result)); // Append to body
-    //   },
-    //   contentType: 'json',
-    //   dataType: 'json',
-    // });
+
+    // Gather data
+    var data = [];
+    $('input[name="order"]', 'table').each(function(){
+      id     = $(this).parents('tr').attr('data-id');
+      amount = $(this).val();
+      data.push({commodity_id: id, amount: amount});
+    });
+
+    // Check for illegal input
+    var error = false;
+    var regex = /^[0-9]*$/;
+    $(data).each(function(){
+      if (! regex.test(this.amount)) {
+        error = true;
+        return false; // Breaks the loop (performance optimization)
+      }
+    });
+    if (error) {
+      StockExchange.addAlert('error', 'Illegal input: use only positive integers', true);
+    }
+
+    // Submit form
+    if (!error) {
+      $.ajax({
+        method: 'POST',
+        url: '/bar_order?110F4B0BDF366C453723', 
+        data: JSON.stringify(data), 
+        success: function(result) {
+          StockExchange.addAlert('success', 'Order saved', true);
+          $('input[name="order"]', 'table').val('');
+        },
+        contentType: 'json',
+      });
+    }
   });
 
   function focus_field(focus_index)

@@ -1,9 +1,5 @@
 %script{src: '/javascripts/barman.js'}
 %h2 Barman interface
-%p
-  Use the key-combination after each field to highlight or use that field.
-  Use numbers 1-9 to input values
-  Use Control + Enter to confirm
 %form
   %table#commodities
     %thead
@@ -27,4 +23,4 @@
     %td{'data-value' => '{{bar_price}}', class: 'price'} {{money bar_price}}
     %td.index
     %td
-      %input{type: :number, class: :amount, min: 1, max: 10, name: 'order[]'}
+      %input{type: :number, class: :amount, min: 1, max: 10, name: 'order'}

@@ -244,10 +244,26 @@ put '/commodities/:name' do |name|
   end
 end
 
-post '/bar_sales' do
+post '/bar_order' do
   auth
-  # for each commodity
-    # log the specified amount as sold
+  req = ActiveSupport::JSON.decode(request.body)
+  req.each do |row|
+    if row['amount'].to_i > 0
+      commodity = Commodity.find(row['commodity_id'])
+      b = BuyOrder.new do |b|
+        b.commodity = commodity
+        b.amount = row['amount'].to_i
+        b.state = :matched
+        b.price = commodity.bar_price
+      end
+      if b.valid?
+        b.save
+      else
+        halt 500, b.errors.full_messages
+      end
+    end
+  end
+  halt 200
 end
 
 # Interface
