@@ -258,6 +258,7 @@ post '/bar_order' do
       end
       if b.valid?
         b.save
+        SellOrder.order(price: :asc).limit(row['amount'].to_i).destroy_all
       else
         halt 500, b.errors.full_messages
       end
