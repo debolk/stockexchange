@@ -1,20 +1,20 @@
 source 'https://rubygems.org'
 
 gem 'sinatra', '~> 1.4.0'
-gem "sqlite3", '~> 1.3.7'
-gem "activerecord", '~> 3.2.13'
-gem "sinatra-activerecord", '~> 1.2.2'
-gem 'rake'
-gem 'haml'
-gem 'acts_as_paranoid'
-gem 'activesupport'
+gem 'mysql2', '~> 0.3.11'
+gem 'activerecord', '~> 3.2.13'
+gem 'sinatra-activerecord', '~> 1.2.2'
+gem 'rake', '~> 10.0.3'
+gem 'haml', '~> 4.0.1'
+gem 'acts_as_paranoid', '~> 0.4.1'
+gem 'activesupport', '~> 3.2.13'
 
 group :production do
   gem 'thin', '~> 1.5.0'
 end
 
 group :development do
-  gem 'rspec'
-  gem "shotgun", '~> 0.9.0'
-  gem "tux", '~> 0.3.0'
+  gem 'rspec', '~> 2.13.0'
+  gem 'shotgun', '~> 0.9.0'
+  gem 'tux', '~> 0.3.0'
 end
