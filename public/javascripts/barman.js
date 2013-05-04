@@ -11,7 +11,23 @@ $(document).ready(function(){
     $('tbody .index').each(function(index){
       $(this).text('F'+(index+1));
     });
+    // Start updating prices (see below)
+    update_prices();
   });
+
+  // Regularly update prices of commodities
+  window.update_prices = function()
+  {
+    // Load updated commodities from server
+    $.getJSON('/commodities', function(commodities) {
+      // Update prices
+      $(commodities).each(function(){
+        $('tr[data-id="'+this.id+'"] .price', 'table tbody').html('&euro;'+(parseInt(this.bar_price)/100).toFixed(2));
+      });
+      // Do it again after 3 seconds
+      setTimeout('update_prices()', 3000);
+    });
+  }
 
   // Calculate total
   calculate_total();
