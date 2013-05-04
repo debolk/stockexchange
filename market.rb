@@ -20,17 +20,21 @@ sleep 2
 log 'done'
 
 # Threads to update market
-log 'Initializing market heartbeat...', false
+log 'Initializing market heartbeat...done'
+
+# Show all errors
+Thread.abort_on_exception = true
+
 @@threads = []
-# Get all commodities
+# Function to retrieve all updated commoditiesfa
 def get_commodities
   uri = URI('http://localhost:3000/commodities?110F4B0BDF366C453723')
   response = Net::HTTP.get_response(uri)
   JSON.parse(response.body)
 end
-commodities = get_commodities
+@@commodities = get_commodities
 # Spawn a heartbeat for each commodity
-commodities.each do |commodity|
+@@commodities.each do |commodity|
   @@threads << Thread.new(commodity) do |commodity|
     while true
       while commodity['supply_rate'].to_i == 0
@@ -60,19 +64,21 @@ end
 @@threads << Thread.new do
   while true
     for commodity in get_commodities
-      for old in commodities
+      for old in @@commodities
         if old['name'] == commodity['name']
-          old
+          old['supply_rate'] = commodity['supply_rate'] 
+          old['supply_price'] = commodity['supply_price']
+          old['bar_price'] = commodity['supply_rate']
         end
       end
     end
-    sleep 15
+    log 'Commodities updated'
+    sleep 3
   end
 end
-# Keep application open till all threads are finished
-@@threads.each { |thr| thr.join }
-log 'done'
 
 # All done
 log 'GONG! Markets are open'
 
+# Keep application open till all threads are finished
+@@threads.each { |thr| thr.join }
