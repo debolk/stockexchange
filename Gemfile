@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'sinatra', '~> 1.4.0'
-gem 'mysql2', '~> 0.3.11'
+gem 'activerecord-mysql2-adapter', '~> 0.0.3'
 gem 'activerecord', '~> 3.2.13'
 gem 'sinatra-activerecord', '~> 1.2.2'
 gem 'rake', '~> 10.0.3'

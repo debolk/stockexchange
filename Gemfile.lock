@@ -9,6 +9,8 @@ GEM
       activesupport (= 3.2.13)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
+    activerecord-mysql2-adapter (0.0.3)
+      mysql2
     activesupport (3.2.13)
       i18n (= 0.6.1)
       multi_json (~> 1.0)
@@ -73,10 +75,10 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (~> 3.2.13)
+  activerecord-mysql2-adapter (~> 0.0.3)
   activesupport (~> 3.2.13)
   acts_as_paranoid (~> 0.4.1)
   haml (~> 4.0.1)
-  mysql2 (~> 0.3.11)
   rake (~> 10.0.3)
   rspec (~> 2.13.0)
   shotgun (~> 0.9.0)

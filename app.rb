@@ -7,9 +7,11 @@ require 'acts_as_paranoid'
 require './sms.rb'
 
 ActiveRecord::Base.establish_connection(
-  adapter:  'sqlite3',
-  database: 'exchange.db',
+  adapter:  'mysql2',
+  database: 'stockexchange',
   host:     'localhost',
+  username: 'stockexchange',
+  password: 'DCavLcCXrBVyRBJq'
 )
 ActiveRecord::Base.include_root_in_json = false
 
@@ -17,11 +19,9 @@ require './models/buyorder.rb'
 require './models/sellorder.rb'
 require './models/commodity.rb'
 
-
 # SETTINGS
 set :auth_employee, '214E7DD41B7C823DF963'
 set :auth_admin,    '110F4B0BDF366C453723'
-
 
 helpers do
 	def auth(admin = false)
