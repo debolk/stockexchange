@@ -24,8 +24,8 @@ $(document).ready(function(){
       $(commodities).each(function(){
         $('tr[data-id="'+this.id+'"] .price', 'table tbody').html('&euro;'+(parseInt(this.bar_price)/100).toFixed(2));
       });
-      // Do it again after 3 seconds
-      setTimeout('update_prices()', 3000);
+      // Do this 4x per second
+      setTimeout('update_prices()', 250);
     });
   }
 
