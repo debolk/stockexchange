@@ -9,7 +9,7 @@ require './sms.rb'
 ActiveRecord::Base.establish_connection(
   adapter:  'mysql2',
   database: 'stockexchange',
-  host:     'localhost',
+  host:     'stockexchange.i.bolkhuis.nl',
   username: 'stockexchange',
   password: 'DCavLcCXrBVyRBJq'
 )
