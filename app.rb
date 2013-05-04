@@ -287,3 +287,7 @@ get '/interface/barman' do
   auth
   haml :'interface/barman'
 end
+
+get '/' do
+  haml :'interface/stats'
+end
