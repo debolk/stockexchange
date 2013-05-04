@@ -1,60 +1,77 @@
 $(document).ready(function(){
 
-  // Load Google API
-  google.load('visualization','1',{'packages': ['corechart'], 'callback':drawChart});
+  // Create graph
+  var data = [];
+  var index = 0;  // counter to keep track of the last position added to the graph
+  var options = {
+    xaxis: {
+      show: false,
+      tickSize: 1,
+    },
+    yaxis: {
+      show: true,
+      min: 0,
+      max: 500,
+      tickSize: 50,
+    },
+    grid: {
+      borderWidth: 0
+    },
+    legend: {
+      show: false,
+    },
+    series: {
+      lines: {
+        lineWidth: 10,
+      },
+      shadowSize: 0,
+    },
+  };
+  var plot = $.plot('.graphs', data, options);
 
-  // Store all state external
-  var charts = [];
-  var datas = [];
-  var options = [];
-
-  // Draw charts initially
-  function drawChart()
-  {
-    // Load commodities
-    $.getJSON('/commodities', function(commodities){
-      $(commodities).each(function(){
-        // Construct a dataTable
-        var data = new google.visualization.DataTable();
-        data.addColumn('datetime', 'Moment');
-        data.addColumn('number', 'Price');
-
-        // Set graph options
-        var options = {
-          title: this.name,
-          legend: {position: 'none'},
-          vAxis: {baselineColor: '#fff'},
-          hAxis: {baselineColor: '#fff'},
-        };
-
-        // Draw chart
-        var target = $('<div>').addClass('graph').appendTo('.graphs');
-        var chart = new google.visualization.LineChart(target[0]);
-        chart.draw(data, options);
-
-        // Store for further reference
-        datas[this.id] = data;
-        charts[this.id] = chart;
-        options[this.id] = options;
+  // Load commodities
+  $.getJSON('/commodities', function(commodities){
+    $(commodities).each(function(){
+      // Add the new data
+      data.push({
+        color: this.id,
+        label: this.name,
+        data: [[0, this.bar_price]],
       });
-      // Update prices in the graph
-      update_prices();
+      // Redraw the graph
+      plot = $.plot('.graphs', data, options);
     });
-  }
+
+    // Start updating prices
+    update_prices();
+  });
 
   // Regularly update prices of commodities
   window.update_prices = function()
   {
+    // Increase the counter to keep data in line
+    index++;
+
     // Load updated commodities from server
     $.getJSON('/commodities', function(commodities) {
       $(commodities).each(function(){
-        // Add a new entry to the dataTable
-        datas[this.id].addRow([new Date(), this.bar_price]);
+        // Add a new entry to the data
+        var commodity = this;
+        $(data).each(function(){
+          if (this.label == commodity.name) {
+            // Drop an entry if the data-set gets too long
+            if (this.data.length > 10) {
+              this.data = this.data.slice(1);
+            } 
+            // Push new data to stack
+            this.data.push([index, commodity.bar_price]);
+          }
+        });
         // Redraw the graph
-        charts[this.id].draw(datas[this.id], options[this.id]);
+        plot = $.plot('.graphs', data, options);
       });
       // Do this 1x per second
-      setTimeout('update_prices()', 1000);
+      setTimeout('update_prices()', 100);
     });
   }
 });
