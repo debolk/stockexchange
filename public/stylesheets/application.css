@@ -133,6 +133,13 @@ footer .secret {
 }
 
 /* Graphs */
+.prices {
+  font-size: 2em;
+}
+.prices .price {
+  display: inline-block;
+  margin-right: 1em;
+}
 .graphs {
   width: 800px;
   height: 400px;

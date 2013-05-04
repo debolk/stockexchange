@@ -32,14 +32,17 @@ $(document).ready(function(){
   // Load commodities
   $.getJSON('/commodities', function(commodities){
     $(commodities).each(function(){
-      // Add the new data
+      // Create a new data-series
       data.push({
         color: this.id,
         label: this.name,
         data: [[0, this.bar_price]],
       });
-      // Redraw the graph
+      // Draw the graph
       plot = $.plot('.graphs', data, options);
+      // Add price to display
+      $('<span>').text(' '+this.name+': ').appendTo('.prices');
+      $('<span>').addClass('price').attr('data-id',this.id).html('&euro;'+(parseInt(this.bar_price)/100).toFixed(2)).appendTo('.prices');
     });
 
     // Start updating prices
@@ -69,6 +72,8 @@ $(document).ready(function(){
         });
         // Redraw the graph
         plot = $.plot('.graphs', data, options);
+        // Update the price listing 
+        $('.price[data-id="'+commodity.id+'"]').html('&euro;'+(parseInt(commodity.bar_price)/100).toFixed(2));
       });
       // Do this 1x per second
       setTimeout('update_prices()', 100);
