@@ -44,11 +44,12 @@ helpers do
   end
 
   def match!
-    BuyOrder.order(price: :desc).each do |buy_order|
+    BuyOrder.order(price: :desc).where('state = ?', 'open').each do |buy_order|
       sell_orders = SellOrder.order(price: :desc).where('price <= ?', buy_order.price).limit(buy_order.amount)
       if sell_orders.count == buy_order.amount
         buy_order.update_attribute :state, :matched
         sell_orders.update_all state: :matched
+        SMS::notify(buy_order.phone, "Je order van " + buy_order.amount.to_s + " " + buy_order.commodity.name + " staat voor je klaar bij het loket!!")
       end
     end
   end
