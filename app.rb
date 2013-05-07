@@ -83,8 +83,12 @@ get '/commodities/:name/propose' do |name|
   commodity = Commodity.where(:name => name).first!
   total = 0
   left = params[:amount].to_i
-  BuyOrder.order(price: :desc).each do |buy_order|
-    break if buy_order.amount > left
+  commodity.buy_orders.where('state = ?', 'open').order(price: :desc).each do |buy_order|
+    if buy_order.amount > left
+      total += buy_order.price * left
+      left = 0
+      break
+    end
     total += buy_order.total_value
     left -= buy_order.amount
   end
