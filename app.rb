@@ -45,7 +45,7 @@ helpers do
 
   def match!
     BuyOrder.order(price: :desc).where('state = ?', 'open').each do |buy_order|
-      sell_orders = SellOrder.order(price: :desc).where('price <= ?', buy_order.price).limit(buy_order.amount)
+      sell_orders = buy_order.commodity.sell_orders.order(price: :desc).where('state = ?', 'open').where('price <= ?', buy_order.price).limit(buy_order.amount)
       if sell_orders.count == buy_order.amount
         buy_order.update_attribute :state, :matched
         sell_orders.update_all state: :matched

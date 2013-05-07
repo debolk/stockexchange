@@ -11,10 +11,10 @@ class Commodity < ActiveRecord::Base
 
   def bar_price
     result = ceiling_price
-    if sell_orders.any?
+    if sell_orders.where('state = ?', 'open').any?
       result = [result, sell_orders.where('state = ?', 'open').minimum('price')].min
     end
-    if buy_orders.any?
+    if buy_orders.where('state = ?', 'open').any?
       result = [result, buy_orders.where('state = ?', 'open').maximum('price')].max
     end
     result
