@@ -17,7 +17,7 @@ $(document).ready(function(){
       $('#update-' + this.name).on('click', function() {
         var update = {
           "supply_price":
-            $('#commodity-' + name + ' input[name=supply_price]').val() * 100,
+            Math.round($('#commodity-' + name + ' input[name=supply_price]').val() * 100),
           "supply_rate":
             $('#commodity-' + name + ' input[name=supply_rate]').val(),
         };
