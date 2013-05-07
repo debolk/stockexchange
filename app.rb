@@ -49,7 +49,9 @@ helpers do
       if sell_orders.count == buy_order.amount
         buy_order.update_attribute :state, :matched
         sell_orders.update_all state: :matched
-        SMS::notify(buy_order.phone, "Je order van " + buy_order.amount.to_s + " " + buy_order.commodity.name + " staat voor je klaar bij het loket!!")
+        if buy_order.phone != nil
+          SMS::notify(buy_order.phone, "Je order van " + buy_order.amount.to_s + " " + buy_order.commodity.name + " staat voor je klaar bij het loket!!")
+        end
       end
     end
   end
