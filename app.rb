@@ -91,7 +91,7 @@ get '/commodities/:name/propose' do |name|
 end
 
 get '/buy_orders' do
-  BuyOrder.order(price: :desc).to_json only: [:id, :phone, :amount, :price, :state], include: :commodity
+  BuyOrder.where('state <> ?', 'paid').order(price: :desc).to_json only: [:id, :phone, :amount, :price, :state], include: :commodity
 end
 
 get '/buy_orders/:id' do |id|
