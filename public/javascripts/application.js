@@ -16,7 +16,13 @@ $(document).ready(function(){
     clearAlerts: function() {
       $('.alerts').empty()
     },
-    addAlert: function(type, text, remove_previous = false) {
+    addAlert: function(type, text, remove_previous) {
+      // Default arguments provided
+      if(typeof(remove_previous)==='undefined') {
+        remove_previous = false;
+      }
+
+      // Clear alerts if asked
       if (remove_previous) {
         this.clearAlerts();
       }
