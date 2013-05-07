@@ -63,7 +63,7 @@ $(document).ready(function(){
         $(data).each(function(){
           if (this.label == commodity.name) {
             // Drop an entry if the data-set gets too long
-            if (this.data.length > 10) {
+            if (this.data.length > 1000) {
               this.data = this.data.slice(1);
             } 
             // Push new data to stack
@@ -76,7 +76,7 @@ $(document).ready(function(){
         $('.price[data-id="'+commodity.id+'"]').html('&euro;'+(parseInt(commodity.bar_price)/100).toFixed(2));
       });
       // Do this 1x per second
-      setTimeout('update_prices()', 100);
+      setTimeout('update_prices()', 500);
     });
   }
 });
