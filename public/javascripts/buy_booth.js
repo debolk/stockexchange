@@ -56,7 +56,7 @@ $(document).ready(function(){
       commodity: $('[name="commodity"]').val(),
       amount: $('[name="amount"]').val(),
       price: $('[name="price"]').val(),
-      phone: $('[name="phone"]').val(),
+      phone: '316'+$('[name="phone"]').val(),
     }
     $.ajax({
       method: 'POST',

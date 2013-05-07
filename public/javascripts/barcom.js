@@ -8,7 +8,7 @@ $(document).ready(function(){
       <form> \
       <div class="row"><h3>' + this.name + '<h3></div> \
       <div class="row"><input type="number" step="0.01" min="0.1" max="15" name="supply_price" value="' + (this.supply_price / 100).toFixed(2) + '"></div> \
-      <div class="row"><input type="range" min="0" max="60" name="supply_rate" value="' + this.supply_rate + '"></div> \
+      <div class="row"><input type="number" min="0" max="5" name="supply_rate" value="' + this.supply_rate + '"></div> \
       <div class="row"><input id="update-' + this.name + '" type="button" value="Update"></div> \
       </form> \
       ');

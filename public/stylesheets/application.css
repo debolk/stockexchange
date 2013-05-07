@@ -37,7 +37,7 @@ input, select, button {
   font-size: x-large;
 }
 
-.number {
+.number, input[type="number"] {
   width: 80px;
 }
 .phone {

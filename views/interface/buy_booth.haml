@@ -6,8 +6,8 @@
     Commodity
     %select#commodity{:name => "commodity"}
   %label
-    Phone
-    %input.phone{type: 'text', name: 'phone', placeholder: '0612345678'}
+    Phone +316
+    %input.phone{type: 'text', name: 'phone', placeholder: '12345678'}
   %label
     Amount
     %input.number{type: 'text', name: 'amount', placeholder: '3'}
@@ -44,6 +44,9 @@
       %th.number Price
       %th Actions
   %tbody 
+
+%h3 Instructies
+%p Mensen komen naar jouw booth toe om aankooporders voor munten te plaatsen. Vul alle velden in het formulier in en klik op "Plaats order".
 
 %script#open_order{type: 'text/x-handlebars-template'}
   %tr{'data-id' => '{{id}}'}
