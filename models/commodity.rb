@@ -7,12 +7,28 @@ class Commodity < ActiveRecord::Base
   validates :buyback_price, presence: true, numericality: true
   validates :bar_price, presence: true, numericality: true
   validates :markup, presence: true, numericality: true
+  validates :orderbook_size, presence: true, numericality: true
 
   has_many :buy_orders
   has_many :sell_orders
   has_many :transactions
 
   def rate
-    transactions.order('created_at DESC').first.buy_rate
+    t = transactions.order('created_at DESC').first
+    if t == nil
+      return 0
+    end
+    t.buy_rate
+  end
+
+  def min_price
+    if orderbook_size < 1
+      return ceiling_price
+    end
+    min = buy_orders.where('state = ?', 'open').order('price DESC').offset(orderbook_size - 1)
+    if !min.any?
+      return 0
+    end
+    return min.first.price + 10
   end
 end
