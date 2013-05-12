@@ -44,13 +44,13 @@ helpers do
   end
 
   def match!
-    BuyOrder.order(price: :desc).where('state = ?', 'open').each do |buy_order|
-      sell_orders = buy_order.commodity.sell_orders.order(price: :desc).where('state = ?', 'open').where('price <= ?', buy_order.price).limit(buy_order.amount)
+    BuyOrder.order('price DESC').where('state = ?', 'open').each do |buy_order|
+      sell_orders = buy_order.commodity.sell_orders.order('price DESC').where('state = ?', 'open').where('price <= ?', buy_order.price).limit(buy_order.amount)
       if sell_orders.count == buy_order.amount
         buy_order.update_attribute :state, :matched
         sell_orders.update_all state: :matched
         if buy_order.phone != nil
-          SMS::notify(buy_order.phone, "Je order van " + buy_order.amount.to_s + " " + buy_order.commodity.name + " staat voor je klaar bij het loket!!")
+          SMS::notify(buy_order.phone, "Je order van " + buy_order.amount.to_s + " " + buy_order.commodity.name + " voor totaal " + buy_order.total_value + " euro staat voor je klaar bij het loket!!")
         end
       end
     end
@@ -83,7 +83,7 @@ get '/commodities/:name/propose' do |name|
   commodity = Commodity.where(:name => name).first!
   total = 0
   left = params[:amount].to_i
-  commodity.buy_orders.where('state = ?', 'open').order(price: :desc).each do |buy_order|
+  commodity.buy_orders.where('state = ?', 'open').order('price DESC').each do |buy_order|
     if buy_order.amount > left
       total += buy_order.price * left
       left = 0
@@ -97,7 +97,7 @@ get '/commodities/:name/propose' do |name|
 end
 
 get '/buy_orders' do
-  BuyOrder.where('state <> ?', 'paid').order(price: :desc).to_json only: [:id, :phone, :amount, :price, :state], include: :commodity
+  BuyOrder.where('state <> ?', 'paid').order('price DESC').to_json only: [:id, :phone, :amount, :price, :state], include: :commodity
 end
 
 get '/buy_orders/:id' do |id|
@@ -109,7 +109,7 @@ get '/buy_orders/:id' do |id|
 end
 
 get '/sell_orders' do
-  SellOrder.order(price: :desc).to_json only: [:id, :phone, :amount, :price], include: :commodity
+  SellOrder.order('price DESC').to_json only: [:id, :phone, :amount, :price], include: :commodity
 end
 
 get '/sell_orders/:id' do |id|
@@ -265,7 +265,7 @@ post '/bar_order' do
       end
       if b.valid?
         b.save
-        SellOrder.order(price: :asc).limit(row['amount'].to_i).destroy_all
+        SellOrder.order('price ASC').limit(row['amount'].to_i).delete_all
       else
         halt 500, b.errors.full_messages
       end
