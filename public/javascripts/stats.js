@@ -69,11 +69,12 @@ $(document).ready(function(){
         // Add a new entry to the data
         var commodity = this;
         $(data).each(function(){
+          // Drop an entry if the data-set gets too long
+          if (this.data.length > 1000) {
+            this.data = this.data.slice(1);
+          } 
+
           if (this.label == commodity.name) {
-            // Drop an entry if the data-set gets too long
-            if (this.data.length > 1000) {
-              this.data = this.data.slice(1);
-            } 
             // Push new data to stack
             this.data.push([index, commodity.bar_price]);
           } else if (this.label == commodity.name + ' - koers') {
