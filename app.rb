@@ -18,6 +18,7 @@ ActiveRecord::Base.include_root_in_json = false
 require './models/buyorder.rb'
 require './models/sellorder.rb'
 require './models/commodity.rb'
+require './models/transaction.rb'
 
 # SETTINGS
 set :auth_employee, '214E7DD41B7C823DF963'
@@ -49,7 +50,18 @@ helpers do
       if sell_orders.count == buy_order.amount
         buy_order.update_attribute :state, :matched
         sell_orders.update_all state: :matched
-        if buy_order.phone != nil
+
+        t = Transaction.new
+        t.commodity = buy_order.commodity
+        t.amount = buy_order.amount
+        t.buy_price = buy_order.total_value
+        t.sell_price = 0
+        sell_orders.each do |s|
+          t.sell_price += s.price
+        end
+        t.save
+
+        if buy_order.phone != nil && /316\d{8}/ =~ buy_order.phone
           SMS::notify(buy_order.phone, "Je order van " + buy_order.amount.to_s + " " + buy_order.commodity.name + " voor totaal " + buy_order.total_value + " euro staat voor je klaar bij het loket!!")
         end
       end
@@ -265,7 +277,18 @@ post '/bar_order' do
       end
       if b.valid?
         b.save
-        SellOrder.order('price ASC').limit(row['amount'].to_i).delete_all
+        sell_orders = SellOrder.order('price ASC').limit(row['amount'].to_i)
+        sell_orders.update_all state: :matched
+
+        t = Transaction.new
+        t.commmodity = b.commodity
+        t.amount = b.amount
+        t.buy_price = b.total_price
+        t.sell_price = 0
+        sell_orders.each do |s|
+          t.sell_price += s.price
+        end
+        t.save
       else
         halt 500, b.errors.full_messages
       end
