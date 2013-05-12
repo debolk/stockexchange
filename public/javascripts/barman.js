@@ -22,7 +22,10 @@ $(document).ready(function(){
     $.getJSON('/commodities', function(commodities) {
       // Update prices
       $(commodities).each(function(){
-        $('tr[data-id="'+this.id+'"] .price', 'table tbody').html('&euro;'+(parseInt(this.bar_price)/100).toFixed(2));
+        var p = (parseInt(this.bar_price) / 100).toFixed(2);
+        $('tr[data-id="'+this.id+'"] .price', 'table tbody').html('&euro;'+p);
+        $('tr[data-id="'+this.id+'"] .price', 'table tbody').attr('data-value', p * 100);
+
       });
       // Do this 4x per second
       setTimeout('update_prices()', 250);
