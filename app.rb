@@ -269,7 +269,7 @@ post '/bar_order' do
         t = Transaction.new
         t.commodity = b.commodity
         t.amount = b.amount
-        t.buy_price = b.total_price
+        t.buy_price = b.total_value
         t.sell_price = 0
         sell_orders.each do |s|
           t.sell_price += s.price
