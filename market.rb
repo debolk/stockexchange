@@ -1,6 +1,8 @@
 require 'net/http'
 require 'json'
 
+require './conf.rb'
+
 # Logging
 @@semaphore = Mutex.new
 def self.log(text, new_line = true)
@@ -68,12 +70,33 @@ end
         if old['name'] == commodity['name']
           old['supply_rate'] = commodity['supply_rate'] 
           old['supply_price'] = commodity['supply_price']
-          old['bar_price'] = commodity['supply_rate']
+          old['bar_price'] = commodity['bar_price']
         end
       end
     end
     log 'Commodities updated'
     sleep 3
+  end
+end
+
+# Spawn a thread to update bar_prices
+@@threads << Thread.new do
+  prices = {}
+  for commodity in Commodity.all
+    prices[commodity.name] = commodity.rate + commodity.markup
+  end
+
+  while true
+    for commodity in Commodity.all
+      cur = commodity.rate + commodity.markup
+      prev = prices[commodity.name]
+
+      newprice = cur > prev ? prev * 0.98 + cur * 0.02 : prev * 0.99 + cur * 0.01
+      log newprice
+      prices[commodity.name] = newprice
+      commodity.update_column :bar_price, prices[commodity.name].round(-1)
+    end
+    sleep 1
   end
 end
 
