@@ -40,7 +40,8 @@ helpers do
         t = Transaction.new
         t.commodity = buy_order.commodity
         t.amount = buy_order.amount
-        t.buy_price = buy_order.total_value
+        t.buy_order = buy_order
+        t.buy_price = 0
         t.sell_price = 0
         sell_orders.each do |s|
           t.sell_price += s.price
@@ -226,6 +227,9 @@ put '/buy_orders/:id/payment' do |id|
       unless order.save
         halt 412, order.errors.full_messages
       end
+      t = order.transaction
+      t.buy_price = order.total_value
+      t.save
     end
   rescue ActiveRecord::RecordNotFound
     halt 404, "Order not found!"

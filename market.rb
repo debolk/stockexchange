@@ -92,7 +92,6 @@ end
       prev = prices[commodity.name]
 
       newprice = cur > prev ? prev * 0.98 + cur * 0.02 : prev * 0.99 + cur * 0.01
-      log newprice
       prices[commodity.name] = newprice
       commodity.update_column :bar_price, prices[commodity.name].round(-1)
     end
