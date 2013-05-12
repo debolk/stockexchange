@@ -1,5 +1,6 @@
 class Transaction < ActiveRecord::Base
   belongs_to :commodity
+  belongs_to :buy_order
   
   validates :amount, presence: true, numericality: true
   validates :buy_price, presence: true, numericality: true

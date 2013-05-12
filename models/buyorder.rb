@@ -2,6 +2,7 @@ class BuyOrder < ActiveRecord::Base
   acts_as_paranoid
   
   belongs_to :commodity
+  has_one :transaction
   
   validates :amount, presence: true, numericality: true
   validates :price, presence: true, numericality: true

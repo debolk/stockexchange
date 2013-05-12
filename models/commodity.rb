@@ -8,6 +8,7 @@ class Commodity < ActiveRecord::Base
 
   has_many :buy_orders
   has_many :sell_orders
+  has_many :transactions
 
   def bar_price
     result = ceiling_price
