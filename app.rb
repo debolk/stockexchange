@@ -267,7 +267,7 @@ post '/bar_order' do
         sell_orders.update_all state: :matched
 
         t = Transaction.new
-        t.commmodity = b.commodity
+        t.commodity = b.commodity
         t.amount = b.amount
         t.buy_price = b.total_price
         t.sell_price = 0
