@@ -32,12 +32,20 @@ $(document).ready(function(){
   // Load commodities
   $.getJSON('/commodities', function(commodities){
     $(commodities).each(function(){
+      console.log(this);
       // Create a new data-series
       data.push({
-        color: this.id,
+        color: 2 * this.id,
         label: this.name,
         data: [[0, this.bar_price]],
       });
+
+      data.push({
+        color: 2 * this.id + 1,
+        label: this.name + " - koers",
+        data: [[0, this.rate]],
+      });
+
       // Draw the graph
       plot = $.plot('.graphs', data, options);
       // Add price to display
@@ -68,6 +76,9 @@ $(document).ready(function(){
             } 
             // Push new data to stack
             this.data.push([index, commodity.bar_price]);
+          } else if (this.label == commodity.name + ' - koers') {
+            // Push new data to stack
+            this.data.push([index, commodity.rate]);
           }
         });
         // Redraw the graph
