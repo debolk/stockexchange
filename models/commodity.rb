@@ -5,6 +5,8 @@ class Commodity < ActiveRecord::Base
   validates :floor_price, presence: true, numericality: true
   validates :ceiling_price, presence: true, numericality: true
   validates :buyback_price, presence: true, numericality: true
+  validates :bar_price, presence: true, numericality: true
+  validates :markup, presence: true, numericality: true
 
   has_many :buy_orders
   has_many :sell_orders
