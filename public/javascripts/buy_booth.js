@@ -1,3 +1,5 @@
+
+
 $(document).ready(function(){
   // Compile templates
   var open_order = Handlebars.compile($("#open_order").html());
@@ -9,19 +11,26 @@ $(document).ready(function(){
       $('<option>').val(this.name).html(this.name).appendTo('#commodity');
     });
   });
-  
-  // Load orders
-  $.getJSON('/buy_orders', function(buy_orders) {
-    $(buy_orders).each(function() {
-      if (this.state == 'matched') {
-        $('#matched_orders tbody').append(matched_order(this));
-      }
-      else {
-        $('#open_orders tbody').append(open_order(this));
-      }
-    });
-  });
 
+  window.load_orders = function(){
+    // Load orders
+    $.getJSON('/buy_orders', function(buy_orders) {
+      $('#matched_orders tbody').empty();
+      $('#open_orders tbody').empty();
+      $(buy_orders).each(function() {
+        if (this.state == 'matched') {
+          $('#matched_orders tbody').append(matched_order(this));
+        }
+        else {
+          $('#open_orders tbody').append(open_order(this));
+        }
+      });
+    });
+  };
+  window.load_orders();
+  
+  setInterval('window.load_orders()', 1000);
+  
   // Select all checkbox
   $('input.all').on('click', function(){
     var table = $(this).parents('table');
@@ -42,6 +51,7 @@ $(document).ready(function(){
       success: function(result){
         row.remove();
         StockExchange.addAlert('success', 'Buy order confirmed', true);
+        window.load_orders();
       },
       error: function() {
         alert('Something went wrong. Please try again or reload');
@@ -65,6 +75,7 @@ $(document).ready(function(){
       success: function(result) {
         StockExchange.addAlert('success', 'Buy order added', true);
         $('#open_orders tbody').append(open_order(result)); // Append to body
+        window.load_orders();
       },
       contentType: 'json',
       dataType: 'json',
