@@ -20,4 +20,8 @@ class Commodity < ActiveRecord::Base
     end
     result
   end
+
+  def rate
+    transactions.order('created_at DESC').first.buy_rate
+  end
 end
