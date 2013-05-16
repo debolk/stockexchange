@@ -108,7 +108,7 @@ $(document).ready(function(){
   window.ticker_direction = function() {
     // No commodities retrieved yet? Return default
     if (window.commodities.length == 0) {
-      return -1;
+      return 0;
     }
 
     // Calculate new ticker price
@@ -119,8 +119,15 @@ $(document).ready(function(){
     var new_average_price = total_price / commodities.length;
 
     // Compare to old price to determine direction
-    var direction = +1;
-    if (new_average_price < ticker_average_price) {
+    var direction = null;
+    var minimum_change_needed = 20;
+    if (Math.abs(new_average_price - ticker_average_price) < minimum_change_needed) {
+      direction = 0;
+    }
+    else if (new_average_price > ticker_average_price) {
+      direction = +1;
+    }
+    else if (new_average_price < ticker_average_price) {
       direction = -1;
     }
 
@@ -138,7 +145,11 @@ $(document).ready(function(){
     var message_index = Math.floor(Math.random()*ticker_texts.length);
     var direction = ticker_direction();
     // Determine message and color
-    if (direction == -1) {
+    if (direction == 0) {
+      ticker.css('background-color', 'darkorange');
+      ticker.text(ticker_texts[2][message_index]);
+    }
+    else if (direction == -1) {
       ticker.css('background-color', 'green');
       ticker.text(ticker_texts[0][message_index]);
     }
@@ -167,6 +178,8 @@ $(document).ready(function(){
     'Message 2.1',
     'Message 2.2',
     'Message 2.3',
+  ],[
+    'Neutral message',
   ]];
 
   showTicker(+1);
