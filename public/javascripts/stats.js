@@ -31,7 +31,6 @@ $(document).ready(function(){
 
   // Load commodities
   $.getJSON('/commodities', function(commodities){
-    window.commodities = commodities;
     $(commodities).each(function(){
       // Create a new data-series
       data.push({
@@ -65,7 +64,11 @@ $(document).ready(function(){
 
     // Load updated commodities from server
     $.getJSON('/commodities', function(commodities) {
+      
+      // Store commodities for usage by the ticker
       window.commodities = commodities;
+
+      // Add new prices to the graph
       $(commodities).each(function(){
         // Add a new entry to the data
         var commodity = this;
@@ -97,14 +100,35 @@ $(document).ready(function(){
    */
   // Store current price
 
-  // Determines the average price index
+  // Average price used by the ticker
+  window.commodities = [];
+  window.ticker_average_price = 0;
+
+  // Determines the direction of the ticker
   window.ticker_direction = function() {
-    if (Math.random() >= 0.5) {
-      return 1;
-    }
-    else {
+    // No commodities retrieved yet? Return default
+    if (window.commodities.length == 0) {
       return -1;
     }
+
+    // Calculate new ticker price
+    var total_price = 0;
+    for (var i = 0; i < window.commodities.length; i++) {
+      total_price += parseInt(commodities.bar_price);
+    }
+    var new_average_price = total_price / commodities.length;
+
+    // Compare to old price to determine direction
+    var direction = +1;
+    if (new_average_price < ticker_average_price) {
+      direction = -1;
+    }
+
+    // Store new price for later usage
+    window.ticker_average_price = new_average_price
+
+    // Return direction of graph
+    return direction;
   }
 
   // Show graph
