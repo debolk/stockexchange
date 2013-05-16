@@ -153,7 +153,7 @@ $(document).ready(function(){
   // Hides the ticker
   window.hideTicker = function() {
     $('#ticker').slideUp(1000);
-    setTimeout(showTicker, 5000);
+    setTimeout(showTicker, 30000);
   }
 
   window.ticker_texts = [[
