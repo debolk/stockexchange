@@ -31,8 +31,8 @@ $(document).ready(function(){
 
   // Load commodities
   $.getJSON('/commodities', function(commodities){
+    window.commodities = commodities;
     $(commodities).each(function(){
-      console.log(this);
       // Create a new data-series
       data.push({
         color: 2 * this.id,
@@ -65,6 +65,7 @@ $(document).ready(function(){
 
     // Load updated commodities from server
     $.getJSON('/commodities', function(commodities) {
+      window.commodities = commodities;
       $(commodities).each(function(){
         // Add a new entry to the data
         var commodity = this;
@@ -90,4 +91,59 @@ $(document).ready(function(){
       setTimeout('update_prices()', 500);
     });
   }
+
+  /*
+   * Ticker tape
+   */
+  // Store current price
+
+  // Determines the average price index
+  window.ticker_direction = function() {
+    if (Math.random() >= 0.5) {
+      return 1;
+    }
+    else {
+      return -1;
+    }
+  }
+
+  // Show graph
+  // Direction is either -1 (lower prices) or 1 (higher prices)
+  window.showTicker = function(){
+    var ticker = $('#ticker');
+    var message_index = Math.floor(Math.random()*ticker_texts.length);
+    var direction = ticker_direction();
+    // Determine message and color
+    if (direction == -1) {
+      ticker.css('background-color', 'green');
+      ticker.text(ticker_texts[0][message_index]);
+    }
+    else {
+      ticker.css('background-color', 'red');
+      ticker.text(ticker_texts[1][message_index]);
+    }
+    ticker.slideDown(1000);
+    // Hide the ticker after five seconds
+    setTimeout(hideTicker, 5000);
+  }
+  // Hides the ticker
+  window.hideTicker = function() {
+    $('#ticker').slideUp(1000);
+    setTimeout(showTicker, 5000);
+  }
+
+  window.ticker_texts = [[
+    'Olieton zakt door level; prijzen dalen',
+    'Message 1.0',
+    'Message 1.1',
+    'Message 1.2',
+  ],[
+    'Olieton ontploft - prijs gaat door het dak',
+    'Message 2.0',
+    'Message 2.1',
+    'Message 2.2',
+    'Message 2.3',
+  ]];
+
+  showTicker(+1);
 });

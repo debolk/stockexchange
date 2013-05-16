@@ -144,3 +144,20 @@ footer .secret {
   width: 100%;
   height: 400px;
 }
+
+/* Ticker tape */
+#ticker {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 15%;
+  width: 70%;
+  font-weight: bold;
+  color: white;
+  font-size: 30px;
+  text-transform: uppercase;
+  padding: 0.5em;
+  text-align: center;
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+}
