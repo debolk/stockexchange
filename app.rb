@@ -283,6 +283,9 @@ post '/bar_order' do
   halt 200
 end
 
+delete '/close' do
+end
+
 # Interface
 get '/interface/barcom' do
   auth true
@@ -306,4 +309,9 @@ end
 
 get '/' do
   haml :'interface/stats'
+end
+
+get '/interface/close' do
+  auth true
+  haml :'interface/close'
 end

@@ -1,0 +1,12 @@
+%script{src: '/javascripts/close.js'}
+.alert.alert-error
+  %p
+    Closing the market will instantly complete any non-matched orders and notify the owners. In addition, it will remove any existing supply and set the supply rate of every available commodity zero. However, it will not prevent new orders from being created manually and all records will be kept. Closing the market essentially performs a 'hard-reset' and should be done only:
+  %ul
+    %li when closing the market at the end of trading
+    %li to hard-reset the market
+  %p
+    This action can not be undone.
+    %strong Are you sure you want to close the market?
+  %p
+    %button.destroy Yes, close the market

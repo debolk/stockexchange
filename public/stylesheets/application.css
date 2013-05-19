@@ -37,6 +37,15 @@ input, select, button {
   font-size: x-large;
 }
 
+button.destroy {
+  background-color: red;
+  border: 0;
+  color: white;
+  border-radius: 0.25em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 .number, input[type="number"] {
   width: 80px;
 }
@@ -104,6 +113,11 @@ footer .secret {
     background-color: #F2DEDE;
     border-color: #EED3D7;
     color: #B94A48;
+}
+.alert-warning {
+    background-color: #FCF8E3;
+    border-color: #FBEED5;
+    color: #C09853;
 }
 
 /* Bar interface */
