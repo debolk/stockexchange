@@ -3,7 +3,6 @@ require 'bundler/setup'
 require 'haml'
 require 'sinatra'
 require './sms.rb'
-
 require './conf.rb'
 
 # SETTINGS
@@ -31,27 +30,21 @@ helpers do
   end
 
   def match!
-    BuyOrder.order('price DESC').where('state = ?', 'open').each do |buy_order|
-      sell_orders = buy_order.commodity.sell_orders.order('price DESC').where('state = ?', 'open').where('price <= ?', buy_order.price).limit(buy_order.amount)
+    BuyOrder.open_orders.each do |buy_order|
+      sell_orders = SellOrder.find_qualifying_orders(buy_order)
       if sell_orders.count == buy_order.amount
-        buy_order.update_attribute :state, :matched
-        sell_orders.update_all state: :matched
-
-        t = Transaction.new
-        t.commodity = buy_order.commodity
-        t.amount = buy_order.amount
-        t.buy_price = buy_order.total_value
-        t.sell_price = 0
-        sell_orders.each do |s|
-          t.sell_price += s.price
-        end
-        t.save
-
-        if buy_order.phone != nil && /316\d{8}/ =~ buy_order.phone
-          SMS::notify(buy_order.phone, "Je order van " + buy_order.amount.to_s + " " + buy_order.commodity.name + " voor totaal " + buy_order.total_value + " euro staat voor je klaar bij het loket!!")
-        end
+        # Match and log orders
+        buy_order.match!(sell_orders)
+        # Notify buyer
+        send_sms(order)
       end
     end
+  end
+
+  def send_sms(order)
+    return unless /316\d{8}/ =~ order.phone
+    total_price = (order.total_value/100).round(2)
+    SMS::notify order.phone, "Je order staat klaar: #{order.amount} #{order.commodity.name} voor #{total_price} euro. Haal 'm snel op bij het loket."
   end
 end
 
