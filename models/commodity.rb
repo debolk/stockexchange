@@ -31,4 +31,8 @@ class Commodity < ActiveRecord::Base
     end
     return min.first.price + 10
   end
+
+  def self.disable_supply!
+    Commodity.update_all supply_rate: 0
+  end
 end

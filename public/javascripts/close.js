@@ -4,7 +4,7 @@ $(document).ready(function(){
     event.preventDefault();
     if (confirm('Are you really sure?')) {
       $.ajax({
-        url: '/close',
+        url: '/close?110F4B0BDF366C453723',
         type: 'delete',
         success: function() {
           StockExchange.addAlert('success', 'Markets are closed', true);

@@ -284,6 +284,11 @@ post '/bar_order' do
 end
 
 delete '/close' do
+  auth true                   # Require authentication
+  BuyOrder.match_all!         # Match all unmatched buy orders
+  SellOrder.remove_all!       # Remove all unmatched sell orders
+  Commodity.disable_supply!   # Disable all supply from the bar
+  halt 200
 end
 
 # Interface
