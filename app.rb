@@ -307,3 +307,7 @@ end
 get '/' do
   haml :'interface/stats'
 end
+
+get '/interface/orderbook' do
+  haml :'interface/orderbook'
+end
