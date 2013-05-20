@@ -4,7 +4,7 @@ class BuyOrder < ActiveRecord::Base
   belongs_to :commodity
   has_one :transaction
   
-  validates :amount, presence: true, numericality: true
+  validates :amount, presence: true, numericality: { :greater_than => 0, :less_than_or_equal_to => 10}
   validates :price, presence: true, numericality: true
   validates :commodity, presence: true
   validates_uniqueness_of :commodity_id, :scope => [:phone, :state, :deleted_at], :unless => Proc.new {|bo| bo.deleted?}, :if => Proc.new {|bo| bo.state == 'open'}
