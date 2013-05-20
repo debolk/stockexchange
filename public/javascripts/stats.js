@@ -168,19 +168,26 @@ $(document).ready(function(){
   }
 
   window.ticker_texts = [[
-    'Olieton zakt door level; prijzen dalen',
-    'Message 1.0',
-    'Message 1.1',
-    'Message 1.2',
+    'Olieton zakt door level: prijzen dalen',
+    'Lokaal alcoholoverschot in Delft',
+    'Nieuw proces voor het efficiënter uitpersen van limoenen',
+    'Noodweer maakt investeren in paraplu\'s noodzakelijk: alcoholconsumptie daalt',
+    'Olieprijs daalt: transportkosten nemen af',
   ],[
-    'Olieton ontploft - prijs gaat door het dak',
-    'Message 2.0',
-    'Message 2.1',
-    'Message 2.2',
-    'Message 2.3',
+    'Olieton ontploft: prijs gaat door het dak',
+    'Overheid investeert extra in studiefinanciëring',
+    'Treinen rijden niet: lokale consumptie van alcohol stijgt',
+    'Tentamens afgerond: consumptie van drank stijgt extreem',
+    'Paardenvlees gevonden in biertank: afname cocktails stijgt',
+    'Kameel ontsnapt: transportkosten stijgen',
+    'Regenachtige dag: oliesjeiks volkomen ontregeld',
   ],[
-    'Neutral message',
+    'Niets te melden',
+    'Meer vrouwen gespot in Delft: geen enkel effect op lokale nerds merkbaar in statistieken',
+    'Liedje over Anne B. stijgt naar plek 2 in de Hitparade',
+    'Vrede op aarde: werkeloosheid onder journalisten stijgt',
+    'Nieuw station "Delft De Bolk" blijkt onvoldoende populair',
   ]];
 
-  showTicker(+1);
+  showTicker(0);
 });
