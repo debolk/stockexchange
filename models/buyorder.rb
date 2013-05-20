@@ -17,20 +17,9 @@ class BuyOrder < ActiveRecord::Base
     price*amount
   end
 
-  def self.match_all!
-    BuyOrder.where(state: :open).each do |order|
-        order.update_attribute :state, :matched
-        Transaction.create(commodity: order.commodity, amount: order.amount, buy_price: order.total_value, sell_price: order.total_value)
-        if buy_order.phone != nil && /316\d{8}/ =~ buy_order.phone
-          SMS::notify(buy_order.phone, "Je order van " + buy_order.amount.to_s + " " + buy_order.commodity.name + " voor totaal " + buy_order.total_value + " euro staat voor je klaar bij het loket!!")
-        end
-      end
-    end
-  end
-
   def match!(sell_orders)
     update_attribute :state, :matched
-    sell_orders.update_all state: :matched
+    sell_orders.update_all state: :matched if sell_orders.present?
     Transaction.create do |t|
       t.commodity = buy_order.commodity
       t.amount = buy_order.amount

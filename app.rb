@@ -278,7 +278,11 @@ end
 
 delete '/close' do
   auth true                   # Require authentication
-  BuyOrder.match_all!         # Match all unmatched buy orders
+  # Match all unmatched buy orders
+  open_orders.each do |order|
+    order.match! nil
+    send_sms(order)
+  end
   SellOrder.remove_all!       # Remove all unmatched sell orders
   Commodity.disable_supply!   # Disable all supply from the bar
   halt 200
