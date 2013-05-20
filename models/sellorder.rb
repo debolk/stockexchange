@@ -5,4 +5,8 @@ class SellOrder < ActiveRecord::Base
 
   validates :price, presence: true, numericality: true
   validates :commodity, presence: true
+
+  def self.find_qualifying_orders(buy_order)
+    order('price DESC').where('commodity_id', buy_order.commodity.id).where('state = ?', 'open').where('price <= ?', buy_order.price).limit(buy_order.amount)
+  end
 end
