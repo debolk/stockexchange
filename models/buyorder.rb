@@ -19,7 +19,7 @@ class BuyOrder < ActiveRecord::Base
 
   def match!(sell_orders)
     update_attribute :state, :matched
-    sell_orders.update_all state: :matched
+    sell_orders.update_all state: :matched if sell_orders.present?
     Transaction.create do |t|
       t.commodity = buy_order.commodity
       t.amount = buy_order.amount
