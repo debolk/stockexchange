@@ -32,7 +32,6 @@ $(document).ready(function(){
   // Load commodities
   $.getJSON('/commodities', function(commodities){
     $(commodities).each(function(){
-      console.log(this);
       // Create a new data-series
       data.push({
         color: 2 * this.id,
@@ -65,6 +64,11 @@ $(document).ready(function(){
 
     // Load updated commodities from server
     $.getJSON('/commodities', function(commodities) {
+      
+      // Store commodities for usage by the ticker
+      window.commodities = commodities;
+
+      // Add new prices to the graph
       $(commodities).each(function(){
         // Add a new entry to the data
         var commodity = this;
@@ -91,4 +95,100 @@ $(document).ready(function(){
       setTimeout('update_prices()', 500);
     });
   }
+
+  /*
+   * Ticker tape
+   */
+  // Store current price
+
+  // Average price used by the ticker
+  window.commodities = [];
+  window.ticker_average_price = 0;
+
+  // Determines the direction of the ticker
+  window.ticker_direction = function() {
+    // No commodities retrieved yet? Return default
+    if (window.commodities.length == 0) {
+      return 0;
+    }
+
+    // Calculate new ticker price
+    var total_price = 0;
+    for (var i = 0; i < window.commodities.length; i++) {
+      total_price += parseInt(commodities.bar_price);
+    }
+    var new_average_price = total_price / commodities.length;
+
+    // Compare to old price to determine direction
+    var direction = null;
+    var minimum_change_needed = 20;
+    if (Math.abs(new_average_price - ticker_average_price) < minimum_change_needed) {
+      direction = 0;
+    }
+    else if (new_average_price > ticker_average_price) {
+      direction = +1;
+    }
+    else if (new_average_price < ticker_average_price) {
+      direction = -1;
+    }
+
+    // Store new price for later usage
+    window.ticker_average_price = new_average_price
+
+    // Return direction of graph
+    return direction;
+  }
+
+  // Show graph
+  // Direction is either -1 (lower prices) or 1 (higher prices)
+  window.showTicker = function(){
+    var ticker = $('#ticker');
+    var message_index = Math.floor(Math.random()*ticker_texts.length);
+    var direction = ticker_direction();
+    // Determine message and color
+    if (direction == 0) {
+      ticker.css('background-color', 'darkorange');
+      ticker.text(ticker_texts[2][message_index]);
+    }
+    else if (direction == -1) {
+      ticker.css('background-color', 'green');
+      ticker.text(ticker_texts[0][message_index]);
+    }
+    else {
+      ticker.css('background-color', 'red');
+      ticker.text(ticker_texts[1][message_index]);
+    }
+    ticker.slideDown(1000);
+    // Hide the ticker after five seconds
+    setTimeout(hideTicker, 5000);
+  }
+  // Hides the ticker
+  window.hideTicker = function() {
+    $('#ticker').slideUp(1000);
+    setTimeout(showTicker, 30000);
+  }
+
+  window.ticker_texts = [[
+    'Olieton zakt door level: prijzen dalen',
+    'Lokaal alcoholoverschot in Delft',
+    'Nieuw proces voor het efficiënter uitpersen van limoenen',
+    'Noodweer maakt investeren in paraplu\'s noodzakelijk: alcoholconsumptie daalt',
+    'Olieprijs daalt: transportkosten nemen af',
+  ],[
+    'Olieton ontploft: prijs gaat door het dak',
+    'Overheid investeert extra in studiefinanciëring',
+    'Treinen rijden niet: lokale consumptie van alcohol stijgt',
+    'Tentamens afgerond: consumptie van drank stijgt extreem',
+    'Paardenvlees gevonden in biertank: afname cocktails stijgt',
+    'Kameel ontsnapt: transportkosten stijgen',
+    'Regenachtige dag: oliesjeiks volkomen ontregeld',
+  ],[
+    'Niets te melden',
+    'Meer vrouwen gespot in Delft: geen enkel effect op lokale nerds merkbaar in statistieken',
+    'Liedje over Anne B. stijgt naar plek 2 in de Hitparade',
+    'Vrede op aarde: werkeloosheid onder journalisten stijgt',
+    'Nieuw station "Delft De Bolk" blijkt onvoldoende populair',
+  ]];
+
+  showTicker(0);
 });
