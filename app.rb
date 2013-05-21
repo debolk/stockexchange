@@ -276,6 +276,18 @@ post '/bar_order' do
   halt 200
 end
 
+delete '/close' do
+  auth true                   # Require authentication
+  # Match all unmatched buy orders
+  open_orders.each do |order|
+    order.match! nil
+    send_sms(order)
+  end
+  SellOrder.remove_all!       # Remove all unmatched sell orders
+  Commodity.disable_supply!   # Disable all supply from the bar
+  halt 200
+end
+
 # Interface
 get '/interface/barcom' do
   auth true
@@ -299,4 +311,9 @@ end
 
 get '/' do
   haml :'interface/stats'
+end
+
+get '/interface/close' do
+  auth true
+  haml :'interface/close'
 end
