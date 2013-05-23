@@ -87,13 +87,22 @@ end
   end
 
   while true
-    for commodity in Commodity.all
-      cur = commodity.rate + commodity.markup
-      prev = prices[commodity.name]
+    if Setting.get('mode') == 'panic'
+      # Calculate panic prices
+      Commodity.each do |commodity|
+        prices[commodity.name] = prices[commodity.name] + rand(-1..1)
+        commodity.update_attribute :bar_price, prices[commodity.name].round(-1)
+      end
+    else
+      # Calculate prices normally
+      for commodity in Commodity.all
+        cur = commodity.rate + commodity.markup
+        prev = prices[commodity.name]
 
-      newprice = cur > prev ? prev * 0.98 + cur * 0.02 : prev * 0.99 + cur * 0.01
-      prices[commodity.name] = newprice
-      commodity.update_column :bar_price, prices[commodity.name].round(-1)
+        newprice = cur > prev ? prev * 0.98 + cur * 0.02 : prev * 0.99 + cur * 0.01
+        prices[commodity.name] = newprice
+        commodity.update_column :bar_price, prices[commodity.name].round(-1)
+      end
     end
     sleep 1
   end
