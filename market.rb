@@ -4,9 +4,9 @@ require 'json'
 require './conf.rb'
 
 # Logging
-@@semaphore = Mutex.new
+@semaphore = Mutex.new
 def self.log(text, new_line = true)
-  @@semaphore.synchronize do
+  @semaphore.synchronize do
     if new_line
       puts text
     else
@@ -27,17 +27,17 @@ log 'Initializing market heartbeat...done'
 # Show all errors
 Thread.abort_on_exception = true
 
-@@threads = []
+@threads = []
 # Function to retrieve all updated commoditiesfa
 def get_commodities
   uri = URI('http://localhost:3000/commodities?110F4B0BDF366C453723')
   response = Net::HTTP.get_response(uri)
   JSON.parse(response.body)
 end
-@@commodities = get_commodities
+@commodities = get_commodities
 # Spawn a heartbeat for each commodity
-@@commodities.each do |commodity|
-  @@threads << Thread.new(commodity) do |commodity|
+@commodities.each do |commodity|
+  @threads << Thread.new(commodity) do |commodity|
     while true
       while commodity['supply_rate'].to_i == 0
         sleep 1
@@ -63,10 +63,10 @@ end
   end
 end
 # Spawn a thread to update commodities
-@@threads << Thread.new do
+@threads << Thread.new do
   while true
     for commodity in get_commodities
-      for old in @@commodities
+      for old in @commodities
         if old['name'] == commodity['name']
           old['supply_rate'] = commodity['supply_rate'] 
           old['supply_price'] = commodity['supply_price']
@@ -80,7 +80,7 @@ end
 end
 
 # Spawn a thread to update bar_prices
-@@threads << Thread.new do
+@threads << Thread.new do
   prices = {}
   for commodity in Commodity.all
     prices[commodity.name] = commodity.rate + commodity.markup
@@ -103,4 +103,4 @@ end
 log 'GONG! Markets are open'
 
 # Keep application open till all threads are finished
-@@threads.each { |thr| thr.join }
+@threads.each { |thr| thr.join }
