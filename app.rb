@@ -57,10 +57,7 @@ before do
   pass unless request.xhr?
 
   # Send special status
-  case Setting.get('mode')
-  when 'panic'
-    halt 503, 'Market panic'
-  when 'closed'
+  if Setting.get('mode') == 'closed'
     halt 503, 'Markets are closed'
   end
 end
