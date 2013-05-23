@@ -19,6 +19,7 @@ $(document).ready(function(){
     },
     legend: {
       show: true,
+      position: 'sw',
     },
     series: {
       lines: {
