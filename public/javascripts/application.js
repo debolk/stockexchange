@@ -7,7 +7,16 @@ $(document).ready(function(){
   // Setup common ajax logic
   $.ajaxSetup({
     error: function(jqXHR, textStatus, errorThrown) {
-      StockExchange.addAlert('error', jqXHR.responseText);
+      // Decide between mega-errors and normal errors
+      if (jqXHR.status == 503) {
+        // Show a mega-error
+        $('#alert-mega').text(jqXHR.responseText);
+        $('#alert-mega, #mega-overlay').show();
+      }
+      else {
+        // Show a regular error
+        StockExchange.addAlert('error', jqXHR.responseText);
+      }
     },
   });
 

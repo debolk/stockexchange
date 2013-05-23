@@ -48,6 +48,17 @@ helpers do
   end
 end
 
+# Broadcast special states of the market to all clients
+before do
+  return unless request.xhr?
+  case Setting.get('mode')
+  when 'panic'
+    halt 503, 'Market panic'
+  when 'closed'
+    halt 503, 'Markets are closed'
+  end
+end
+
 # REST API
 get '/commodities' do
   if auth? admin: true
