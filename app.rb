@@ -291,6 +291,11 @@ delete '/close' do
   halt 200
 end
 
+delete '/panic' do
+  auth true
+  Setting.set('mode', 'panic')
+end
+
 # Interface
 get '/interface/barcom' do
   auth true
@@ -319,4 +324,9 @@ end
 get '/interface/close' do
   auth true
   haml :'interface/close'
+end
+
+get '/interface/panic' do
+  auth true
+  haml :'interface/panic'
 end

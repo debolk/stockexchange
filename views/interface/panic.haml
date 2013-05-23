@@ -1,0 +1,9 @@
+%script{src: '/javascripts/panic.js'}
+.alert.alert-error
+  %p
+    Pressing the button below will put the application in "panic mode". This disables the orderbook and makes the stock exchange behave like the DSB-stock exchange. This mode is quite a lot less awesome and should only be used if the normal operation doesn't work for some reason that can not be remedied while in operation.
+  %p
+    This action can not be undone.
+    %strong Are you sure you want to put the market in panic mode?
+  %p
+    %button.destroy Yes, panic the market
