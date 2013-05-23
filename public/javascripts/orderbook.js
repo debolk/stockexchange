@@ -4,16 +4,25 @@ $(document).ready(function(){
 
   // Function to load new orders from the server
   window.load_orders = function(){
-    $.getJSON('/buy_orders', function(buy_orders) {
-      // Empty the table
-      $('#open_orders tbody').empty();
-      
-      // Insert new orders
+
+    // Load buy orders
+    var buy_call = $.getJSON('/buy_orders', function(buy_orders) {
+      $('#buy_orders tbody').empty();
       $(buy_orders).each(function() {
-        $('#open_orders tbody').append(open_order(this));
+        $('#buy_orders tbody').append(open_order(this));
       });
-      
-      // Load new orders after a second
+    });
+
+    // Load sell orders
+    var sell_call = $.getJSON('/sell_orders', function(sell_orders) {
+      $('#sell_orders tbody').empty();
+      $(sell_orders).each(function() {
+        $('#sell_orders tbody').append(open_order(this));
+      });
+    });
+
+    // Wait a second after loading before updating again
+    $.when(buy_call, sell_call).then(function(){
       setTimeout('window.load_orders()', 1000);
     });
   };

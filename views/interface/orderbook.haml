@@ -1,17 +1,26 @@
 %script{src: '/javascripts/orderbook.js'}
-%h2 Open orders by price
-%table#open_orders.orders
-  %thead 
-    %tr 
-      %th Phone
-      %th Commodity
-      %th.number Amount
-      %th.number Price
-  %tbody 
+.column
+  %h2 Buy orders by price
+  %table#buy_orders.orders
+    %thead 
+      %tr 
+        %th Commodity
+        %th.number Amount
+        %th.number Price
+    %tbody 
+
+.column
+  %h2 Sell orders by price
+  %table#sell_orders.orders
+    %thead 
+      %tr 
+        %th Commodity
+        %th.number Amount
+        %th.number Price
+    %tbody 
 
 %script#open_order{type: 'text/x-handlebars-template'}
   %tr{'data-id' => '{{id}}'}
-    %td {{phone}}
     %td {{commodity.name}}
     %td.number {{amount}}
     %td.number {{money price}}

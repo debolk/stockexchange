@@ -161,3 +161,20 @@ footer .secret {
   border-bottom-left-radius: 1em;
   border-bottom-right-radius: 1em;
 }
+
+.column {
+  float: left;
+  width: 50%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Clearfix */
+.clearfix:before, .clearfix:after {
+    content: "\0020"; 
+    display: block; 
+    height: 0; 
+    overflow: hidden;
+}
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
