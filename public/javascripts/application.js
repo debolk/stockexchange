@@ -27,6 +27,7 @@ $(document).ready(function(){
       if (response == 'normal') {
         // Resume normal operations
         $('#alert-mega, #mega-overlay').hide();
+        window.location.reload();
       }
       else {
         // Keep scanning
