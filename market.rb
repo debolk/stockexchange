@@ -89,8 +89,12 @@ end
   while true
     if Setting.get('mode') == 'panic'
       # Calculate panic prices
-      Commodity.each do |commodity|
-        prices[commodity.name] = prices[commodity.name] + rand(-1..1)
+      Commodity.all.each do |commodity|
+        new_price = prices[commodity.name] + rand(-10..10)
+        min_price = commodity.panic_price - commodity.panic_variance
+        max_price = commodity.panic_price + commodity.panic_variance
+        new_price = [[min_price, new_price].max, max_price].min
+        prices[commodity.name] = new_price
         commodity.update_attribute :bar_price, prices[commodity.name].round(-1)
       end
     else
