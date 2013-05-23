@@ -12,6 +12,7 @@ $(document).ready(function(){
         // Show a mega-error
         $('#alert-mega').text(jqXHR.responseText);
         $('#alert-mega, #mega-overlay').show();
+        track_errors();
       }
       else {
         // Show a regular error
@@ -19,6 +20,20 @@ $(document).ready(function(){
       }
     },
   });
+
+  window.track_errors = function()
+  {
+    $.get('/status',function(response) {
+      if (response == 'normal') {
+        // Resume normal operations
+        $('#alert-mega, #mega-overlay').hide();
+      }
+      else {
+        // Keep scanning
+        setTimeout('track_errors()', 3000);
+      }
+    });
+  }
 
   // Global object for logic and stuffz
   window.StockExchange = {

@@ -50,7 +50,13 @@ end
 
 # Broadcast special states of the market to all clients
 before do
-  return unless request.xhr?
+  # Do not intercept on the special /status URL
+  pass if request.path_info.split('/')[1] == 'status'
+
+  # Only intercept XHR (AJAX) requests
+  pass unless request.xhr?
+
+  # Send special status
   case Setting.get('mode')
   when 'panic'
     halt 503, 'Market panic'
@@ -305,6 +311,10 @@ end
 delete '/panic' do
   auth true
   Setting.set('mode', 'panic')
+end
+
+get '/status' do
+  halt 200, Setting.get('mode')
 end
 
 # Interface
