@@ -12,7 +12,8 @@ $(document).ready(function(){
       $(this).text('F'+(index+1));
     });
     // Start updating prices (see below)
-    update_prices();
+    // Do this 2x per second
+    setInterval('update_prices()', 500);
   });
 
   // Regularly update prices of commodities
@@ -27,8 +28,6 @@ $(document).ready(function(){
         $('tr[data-id="'+this.id+'"] .price', 'table tbody').attr('data-value', p * 100);
 
       });
-      // Do this 4x per second
-      setTimeout('update_prices()', 250);
     });
   }
 
