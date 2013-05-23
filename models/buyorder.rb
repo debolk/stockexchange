@@ -23,7 +23,7 @@ class BuyOrder < ActiveRecord::Base
     Transaction.create do |t|
       t.commodity = buy_order.commodity
       t.amount = buy_order.amount
-      t.buy_price = buy_order.total_value
+      t.buy_price = 0 # set after payment
       t.sell_price = sell_orders.sum(:price)
       t.save
     end
