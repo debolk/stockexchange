@@ -14,4 +14,5 @@ require './models/buyorder.rb'
 require './models/sellorder.rb'
 require './models/commodity.rb'
 require './models/transaction.rb'
+require './models/setting.rb'
 
