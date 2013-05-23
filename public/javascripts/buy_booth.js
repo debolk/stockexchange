@@ -1,5 +1,3 @@
-
-
 $(document).ready(function(){
   // Compile templates
   var open_order = Handlebars.compile($("#open_order").html());

@@ -1,15 +1,19 @@
 %script{src: '/javascripts/barcom.js'}
-%h2 Bar interface
-%div#commodities
-  %div.commodity
-    %label.row
-      Commodity
-    %label.row
-      Price
-    %label.row
-      Rate per minute
-
-%h3 Instructies
-%p Met deze interface bepaal je hoe snel het bier de markt op stroomt, en tegen welke prijs. Stel beide in en druk op update. Als je bijvoorbeeld 1.20 en 4 invult, komt er elke 15 seconden een biertje beschikbaar voor 1 euro 20.
-%p
-  %strong Maximum prijs is 5 euro, maximum adviessnelheid is 5 per minuut.
+%h2 Barcom
+%form
+  %p
+    %label Commodity
+    %select#commodity
+  %p
+    %label Price
+    %input#price{type: :number, name: :price}
+  %p
+    %label Amount
+    %input#amount{type: :number, name: :amount}
+  %p
+    %label Spread over 
+    %input#spread{type: :number, name: :spread}
+    minutes
+  %p
+    %label &nbsp;
+    %button#submit Add supply
