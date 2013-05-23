@@ -11,7 +11,7 @@ $(document).ready(function(){
     yaxis: {
       show: true,
       min: 0,
-      max: 500,
+      max: 750,
       tickSize: 50,
     },
     grid: {
