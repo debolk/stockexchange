@@ -88,7 +88,7 @@ get '/commodities/:name/propose' do |name|
 end
 
 get '/buy_orders' do
-  BuyOrder.where('state <> ?', 'paid').order('price DESC').to_json only: [:id, :phone, :amount, :price, :state], include: :commodity
+  BuyOrder.where('state <> ?', 'paid').order('commodity_id, price DESC').to_json only: [:id, :phone, :amount, :price, :state], include: :commodity
 end
 
 get '/buy_orders/:id' do |id|
@@ -100,7 +100,7 @@ get '/buy_orders/:id' do |id|
 end
 
 get '/sell_orders' do
-  SellOrder.order('price DESC').to_json only: [:id, :phone, :amount, :price], include: :commodity
+  SellOrder.order('commodity_id, price DESC').to_json only: [:id, :phone, :amount, :price], include: :commodity
 end
 
 get '/sell_orders/:id' do |id|
