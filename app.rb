@@ -316,12 +316,11 @@ get '/' do
   haml :'interface/stats'
 end
 
-<<<<<<< HEAD
 get '/interface/orderbook' do
   haml :'interface/orderbook'
-=======
+end
+
 get '/interface/close' do
   auth true
   haml :'interface/close'
->>>>>>> develop
 end
