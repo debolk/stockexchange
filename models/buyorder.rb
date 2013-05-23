@@ -39,7 +39,7 @@ class BuyOrder < ActiveRecord::Base
 
   def remove_lowest_order
     Commodity.all.each do |commodity|
-      to_be_destroyed = commodity.buy_orders.count - Setting.get('order_limit')
+      to_be_destroyed = commodity.buy_orders.count - Setting.get('order_limit').to_i
       if to_be_destroyed > 0
         commodity.buy_orders.order('price asc').limit(to_be_destroyed).destroy_all
       end
