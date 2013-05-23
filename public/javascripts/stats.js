@@ -64,7 +64,7 @@ $(document).ready(function(){
       });
     
       // Start updating prices
-      update_prices();
+      setInterval('update_prices()', 500);
     }
   });
 
@@ -106,9 +106,8 @@ $(document).ready(function(){
           // Update the price listing 
           $('.price[data-id="'+commodity.id+'"]').html('&euro;'+(parseInt(commodity.bar_price)/100).toFixed(2));
         });
-        // Do this 1x per second
-        setTimeout('update_prices()', 500);
-      }
+      },
+      error: function(){},
     });
   }
 
