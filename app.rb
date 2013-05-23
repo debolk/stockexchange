@@ -48,6 +48,20 @@ helpers do
   end
 end
 
+# Broadcast special states of the market to all clients
+before do
+  # Do not intercept on the special /status URL
+  pass if request.path_info.split('/')[1] == 'status'
+
+  # Only intercept XHR (AJAX) requests
+  pass unless request.xhr?
+
+  # Send special status
+  if Setting.get('mode') == 'closed'
+    halt 503, 'Markets are closed'
+  end
+end
+
 # REST API
 get '/commodities' do
   if auth? admin: true
@@ -291,6 +305,15 @@ delete '/close' do
   halt 200
 end
 
+delete '/panic' do
+  auth true
+  Setting.set('mode', 'panic')
+end
+
+get '/status' do
+  halt 200, Setting.get('mode')
+end
+
 # Interface
 get '/interface/barcom' do
   auth true
@@ -323,4 +346,9 @@ end
 get '/interface/close' do
   auth true
   haml :'interface/close'
+end
+
+get '/interface/panic' do
+  auth true
+  haml :'interface/panic'
 end
