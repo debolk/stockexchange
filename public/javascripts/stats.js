@@ -159,13 +159,13 @@ $(document).ready(function(){
       ticker.text(ticker_texts[1][message_index]);
     }
     ticker.slideDown(1000);
-    // Hide the ticker after five seconds
-    setTimeout(hideTicker, 5000);
+    // Hide the ticker after ten seconds
+    setTimeout(hideTicker, 10000);
   }
   // Hides the ticker
   window.hideTicker = function() {
     $('#ticker').slideUp(1000);
-    setTimeout(showTicker, 30000);
+    setTimeout(showTicker, 60000);
   }
 
   window.ticker_texts = [[
