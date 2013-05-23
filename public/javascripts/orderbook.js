@@ -1,6 +1,7 @@
 $(document).ready(function(){
   // Compile templates
-  var open_order = Handlebars.compile($("#open_order").html());
+  var open_buy_order = Handlebars.compile($("#open_buy_order").html());
+  var open_sell_order = Handlebars.compile($("#open_sell_order").html());
 
   // Function to load new orders from the server
   window.load_orders = function(){
@@ -9,7 +10,7 @@ $(document).ready(function(){
     var buy_call = $.getJSON('/buy_orders', function(buy_orders) {
       $('#buy_orders tbody').empty();
       $(buy_orders).each(function() {
-        $('#buy_orders tbody').append(open_order(this));
+        $('#buy_orders tbody').append(open_buy_order(this));
       });
     });
 
@@ -17,7 +18,7 @@ $(document).ready(function(){
     var sell_call = $.getJSON('/sell_orders', function(sell_orders) {
       $('#sell_orders tbody').empty();
       $(sell_orders).each(function() {
-        $('#sell_orders tbody').append(open_order(this));
+        $('#sell_orders tbody').append(open_sell_order(this));
       });
     });
 

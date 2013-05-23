@@ -15,12 +15,16 @@
     %thead 
       %tr 
         %th Commodity
-        %th.number Amount
         %th.number Price
     %tbody 
 
-%script#open_order{type: 'text/x-handlebars-template'}
+%script#open_buy_order{type: 'text/x-handlebars-template'}
   %tr{'data-id' => '{{id}}'}
     %td {{commodity.name}}
     %td.number {{amount}}
+    %td.number {{money price}}
+
+%script#open_sell_order{type: 'text/x-handlebars-template'}
+  %tr{'data-id' => '{{id}}'}
+    %td {{commodity.name}}
     %td.number {{money price}}
