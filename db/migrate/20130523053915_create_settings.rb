@@ -7,5 +7,6 @@ class CreateSettings < ActiveRecord::Migration
     end
 
     Setting.create(key: 'mode', value: 'normal')
+    Setting.create(key: 'order_limit', value: '7')
   end
 end
