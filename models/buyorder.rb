@@ -16,4 +16,20 @@ class BuyOrder < ActiveRecord::Base
   def total_value
     price*amount
   end
+
+  def match!(sell_orders)
+    update_attribute :state, :matched
+    sell_orders.update_all state: :matched if sell_orders.present?
+    Transaction.create do |t|
+      t.commodity = buy_order.commodity
+      t.amount = buy_order.amount
+      t.buy_price = 0 # set after payment
+      t.sell_price = sell_orders.sum(:price)
+      t.save
+    end
+  end
+
+  def self.open_orders
+    order('price DESC').where('state = ?', 'open')
+  end
 end

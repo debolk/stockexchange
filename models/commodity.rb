@@ -16,7 +16,7 @@ class Commodity < ActiveRecord::Base
   def rate
     t = transactions.order('created_at DESC').first
     if t == nil
-      return 0
+      return floor_price
     end
     t.buy_rate
   end
@@ -30,5 +30,9 @@ class Commodity < ActiveRecord::Base
       return 0
     end
     return min.first.price + 10
+  end
+
+  def self.disable_supply!
+    Commodity.update_all supply_rate: 0
   end
 end
