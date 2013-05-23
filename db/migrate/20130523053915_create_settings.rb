@@ -5,5 +5,7 @@ class CreateSettings < ActiveRecord::Migration
       t.string :value
       t.timestamps
     end
+
+    Setting.create(key: 'mode', value: 'normal')
   end
 end
