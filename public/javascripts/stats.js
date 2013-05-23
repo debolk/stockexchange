@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
   // Create graph
-  var data = [];
+  var trend = {};
   var index = 0;  // counter to keep track of the last position added to the graph
   var options = {
     xaxis: {
@@ -18,7 +18,7 @@ $(document).ready(function(){
       borderWidth: 0
     },
     legend: {
-      show: false,
+      show: true,
     },
     series: {
       lines: {
@@ -27,7 +27,6 @@ $(document).ready(function(){
       shadowSize: 0,
     },
   };
-  var plot = $.plot('.graphs', data, options);
 
   // Load commodities
   $.ajax({
@@ -35,24 +34,33 @@ $(document).ready(function(){
     url: '/commodities',
     success: function(commodities){
       $(commodities).each(function(){
+        trend[this.name] = [];
+
         // Create a new data-series
-        data.push({
-          color: 2 * this.id,
-          label: this.name,
+        trend[this.name].push({
+          color: '#000000',
+          label: "barprijs",
           data: [[0, this.bar_price]],
         });
 
-        data.push({
-          color: 2 * this.id + 1,
-          label: this.name + " - koers",
+        trend[this.name].push({
+          color: '#999999',
+          label: "koers",
+          lines: {
+            lineWidth: 4,
+          },
           data: [[0, this.rate]],
         });
 
+        graph = $('<div>').addClass('graph-' + this.id).addClass('graph');
+        graph.appendTo('.graphs');
+
         // Draw the graph
-        plot = $.plot('.graphs', data, options);
+        plot = $.plot('.graph-' + this.id, trend[this.name], options);
         // Add price to display
-        $('<span>').text(' '+this.name+': ').appendTo('.prices');
-        $('<span>').addClass('price').attr('data-id',this.id).html('&euro;'+(parseInt(this.bar_price)/100).toFixed(2)).appendTo('.prices');
+        container = $('<div>').addClass('price-spacer').appendTo('.prices');
+        $('<span>').text(' '+this.name+': ').appendTo(container);
+        $('<span>').addClass('price').attr('data-id',this.id).html('&euro;'+(parseInt(this.bar_price)/100).toFixed(2)).appendTo(container);
       });
     
       // Start updating prices
@@ -79,22 +87,22 @@ $(document).ready(function(){
         $(commodities).each(function(){
           // Add a new entry to the data
           var commodity = this;
-          $(data).each(function(){
+          $(trend[commodity.name]).each(function(){
             // Drop an entry if the data-set gets too long
             if (this.data.length > 1000) {
               this.data = this.data.slice(1);
             } 
 
-            if (this.label == commodity.name) {
+            if (this.label == "barprijs") {
               // Push new data to stack
               this.data.push([index, commodity.bar_price]);
-            } else if (this.label == commodity.name + ' - koers') {
+            } else if('koers') {
               // Push new data to stack
               this.data.push([index, commodity.rate]);
             }
           });
           // Redraw the graph
-          plot = $.plot('.graphs', data, options);
+          plot = $.plot('.graph-' + commodity.id, trend[commodity.name], options);
           // Update the price listing 
           $('.price[data-id="'+commodity.id+'"]').html('&euro;'+(parseInt(commodity.bar_price)/100).toFixed(2));
         });
