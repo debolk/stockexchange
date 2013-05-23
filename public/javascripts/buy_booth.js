@@ -29,7 +29,7 @@ $(document).ready(function(){
   };
   window.load_orders();
   
-  setInterval('window.load_orders()', 1000);
+  setInterval('window.load_orders()', 2000);
   
   // Select all checkbox
   $('input.all').on('click', function(){
@@ -67,6 +67,7 @@ $(document).ready(function(){
       amount: $('[name="amount"]').val(),
       price: $('[name="price"]').val(),
       phone: '316'+$('[name="phone"]').val(),
+      owner: $('[name="owner"]').val(),
     }
     $.ajax({
       method: 'POST',

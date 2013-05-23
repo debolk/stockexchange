@@ -65,9 +65,9 @@ end
 # REST API
 get '/commodities' do
   if auth? admin: true
-    Commodity.all.to_json only: [:id, :name, :supply_rate, :supply_price, :bar_price], methods: [:rate]
+    Commodity.all.to_json only: [:id, :name, :supply_rate, :supply_price, :bar_price], methods: [:rate, :min_price]
   else
-    Commodity.all.to_json only: [:id, :name, :bar_price], methods: [:rate]
+    Commodity.all.to_json only: [:id, :name, :bar_price], methods: [:rate, :min_price]
   end
 end
 
@@ -102,12 +102,12 @@ get '/commodities/:name/propose' do |name|
 end
 
 get '/buy_orders' do
-  BuyOrder.where('state <> ?', 'paid').order('commodity_id, price DESC').to_json only: [:id, :phone, :amount, :price, :state], include: :commodity
+  BuyOrder.where('state <> ?', 'paid').order('commodity_id, price DESC').to_json only: [:id, :phone, :owner, :amount, :price, :state], include: :commodity
 end
 
 get '/buy_orders/:id' do |id|
 	begin
-		BuyOrder.find(id).to_json only: [:id, :phone, :amount, :price, :state], include: :commodity
+		BuyOrder.find(id).to_json only: [:id, :phone, :owner, :amount, :price, :state], include: :commodity
 	rescue ActiveRecord::RecordNotFound
 		halt 404, "Order not found!"
 	end
@@ -171,10 +171,15 @@ post '/buy_orders' do
 
   begin
     commodity = Commodity.where(:name => req["commodity"]).first!
+    #halt 412, commodity.min_price.to_s
+    if req["price"].to_i < commodity.min_price
+      halt 412, "Price to low to fit in order book"
+    end
     order = BuyOrder.new
     order.amount = req["amount"]
     order.price = req["price"]
     order.phone = req["phone"]
+    order.owner = req["owner"]
     order.commodity = commodity
     unless order.save
       halt 412, order.errors.full_messages
@@ -270,6 +275,7 @@ post '/bar_order' do
         b.amount = row['amount'].to_i
         b.state = :matched
         b.price = commodity.bar_price
+        b.owner = "bar"
       end
       if b.valid?
         b.save

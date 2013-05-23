@@ -9,6 +9,9 @@
     Phone +316
     %input.phone{type: 'text', name: 'phone', placeholder: '12345678'}
   %label
+    Name
+    %input.owner{type: 'text', name: 'owner'}
+  %label
     Amount
     %input.number{type: 'text', name: 'amount', placeholder: '3'}
   %label
@@ -25,6 +28,7 @@
         %input.all{:type => "checkbox"}
       %th ID
       %th Phone
+      %th Name
       %th Commodity
       %th.number Amount
       %th.number Price
@@ -39,6 +43,7 @@
         %input.all{:type => "checkbox"}
       %th ID
       %th Phone
+      %th Name
       %th Commodity
       %th.number Amount
       %th.number Price
@@ -54,6 +59,7 @@
       %input{:type => "checkbox"}  
     %td {{id}}
     %td {{phone}}
+    %td {{owner}}
     %td {{commodity.name}}
     %td.number {{amount}}
     %td.number {{money price}}
@@ -66,6 +72,7 @@
       %input{:type => "checkbox"}  
     %td {{id}}
     %td {{phone}}
+    %td {{owner}}
     %td {{commodity.name}}
     %td.number {{amount}}
     %td.number {{money price}}

@@ -16,7 +16,7 @@ class Commodity < ActiveRecord::Base
   def rate
     t = transactions.order('created_at DESC').first
     if t == nil
-      return floor_price
+      return ceiling_price
     end
     t.buy_rate
   end
@@ -25,7 +25,7 @@ class Commodity < ActiveRecord::Base
     if orderbook_size < 1
       return ceiling_price
     end
-    min = buy_orders.where('state = ?', 'open').order('price DESC').offset(orderbook_size - 1)
+    min = buy_orders.where('state = ?', 'open').order('price DESC').offset(orderbook_size - 2)
     if !min.any?
       return 0
     end

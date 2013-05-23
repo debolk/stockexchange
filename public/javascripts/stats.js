@@ -22,7 +22,7 @@ $(document).ready(function(){
     },
     series: {
       lines: {
-        lineWidth: 10,
+        lineWidth: 7,
       },
       shadowSize: 0,
     },
@@ -50,6 +50,15 @@ $(document).ready(function(){
             lineWidth: 4,
           },
           data: [[0, this.rate]],
+        });
+
+        trend[this.name].push({
+          color: '#BBBBBB',
+          label: "minimum",
+          lines: {
+            lineWidth: 2,
+          },
+          data: [[0, this.min_price]],
         });
 
         graph = $('<div>').addClass('graph-' + this.id).addClass('graph');
@@ -96,9 +105,11 @@ $(document).ready(function(){
             if (this.label == "barprijs") {
               // Push new data to stack
               this.data.push([index, commodity.bar_price]);
-            } else if('koers') {
+            } else if(this.label == 'koers') {
               // Push new data to stack
               this.data.push([index, commodity.rate]);
+            } else if(this.label == 'minimum') {
+              this.data.push([index, commodity.min_price]);
             }
           });
           // Redraw the graph
