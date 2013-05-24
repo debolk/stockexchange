@@ -1,19 +1,42 @@
 %script{src: '/javascripts/barcom.js'}
 %h2 Barcom
-%form
-  %p
-    %label Commodity
-    %select#commodity
-  %p
-    %label Price
-    %input#price{type: :number, name: :price}
-  %p
-    %label Amount
-    %input#amount{type: :number, name: :amount}
-  %p
-    %label Spread over 
-    %input#spread{type: :number, name: :spread}
-    minutes
-  %p
-    %label &nbsp;
-    %button#submit Add supply
+.column
+  %h3 Set supply
+  %form
+    %p
+      %label Commodity
+      %select#commodity
+    %p
+      %label Price
+      %input#price{type: :number, name: :price}
+    %p
+      %label Amount
+      %input#amount{type: :number, name: :amount}
+    %p
+      %label Spread over 
+      %input#spread{type: :number, name: :spread}
+      minutes
+    %p
+      %label &nbsp;
+      %button#submit Add supply
+.column
+  %h3 Existing supply
+  %table
+    %thead
+      %tr
+        %th Commodity
+        %th # bull market
+        %th # bear market
+        %th Bar supply price
+        %th Bar supply rate
+        %th Bar supply left
+    %tbody
+
+%script#commodity_template{type: 'text/x-handlebars-template'}
+  %tr{'data-id' => '{{id}}'}
+    %td {{name}}
+    %td {{bull_market}}
+    %td {{bear_market}}
+    %td {{money supply_price}}
+    %td {{supply_rate}}
+    %td {{supply_amount}}
