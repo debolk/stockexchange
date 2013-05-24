@@ -35,4 +35,12 @@ class Commodity < ActiveRecord::Base
   def self.disable_supply!
     Commodity.update_all supply_rate: 0
   end
+
+  def bull_market
+    buy_orders.open_orders.count
+  end
+
+  def bear_market
+    sell_orders.where(state: :open).count
+  end
 end

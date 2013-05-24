@@ -65,7 +65,7 @@ end
 # REST API
 get '/commodities' do
   if auth? admin: true
-    Commodity.all.to_json only: [:id, :name, :supply_rate, :supply_price, :bar_price], methods: [:rate, :min_price]
+    Commodity.all.to_json only: [:id, :name, :supply_rate, :supply_price, :bar_price, :supply_amount, :supply_rate], methods: [:rate, :min_price, :bear_market, :bull_market]
   else
     Commodity.all.to_json only: [:id, :name, :bar_price], methods: [:rate, :min_price]
   end
