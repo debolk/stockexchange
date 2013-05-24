@@ -36,15 +36,9 @@ helpers do
         # Match and log orders
         buy_order.match!(sell_orders)
         # Notify buyer
-        send_sms(order)
+        order.notify_matched
       end
     end
-  end
-
-  def send_sms(order)
-    return unless /316\d{8}/ =~ order.phone
-    total_price = (order.total_value/100).round(2)
-    SMS::notify order.phone, "Je order staat klaar: #{order.amount} #{order.commodity.name} voor #{total_price} euro. Haal 'm snel op bij het loket."
   end
 end
 
@@ -303,12 +297,13 @@ end
 delete '/close' do
   auth true                   # Require authentication
   # Match all unmatched buy orders
-  open_orders.each do |order|
-    order.match! nil
-    send_sms(order)
+  BuyOrder.open_orders.each do |order|
+    order.notify_close
+    order.delete
   end
   SellOrder.remove_all!       # Remove all unmatched sell orders
   Commodity.disable_supply!   # Disable all supply from the bar
+  Setting.set('mode', 'closed')
   halt 200
 end
 
@@ -358,4 +353,9 @@ end
 get '/interface/panic' do
   auth true
   haml :'interface/panic'
+end
+
+get '/interface/42com' do
+  auth true
+  haml :'interface/42com'
 end

@@ -23,8 +23,8 @@ class BuyOrder < ActiveRecord::Base
     update_attribute :state, :matched
     sell_orders.update_all state: :matched if sell_orders.present?
     Transaction.create do |t|
-      t.commodity = buy_order.commodity
-      t.amount = buy_order.amount
+      t.commodity = commodity
+      t.amount = amount
       t.buy_price = 0 # set after payment
       t.sell_price = sell_orders.sum(:price)
       t.save
@@ -47,6 +47,12 @@ class BuyOrder < ActiveRecord::Base
     pretty_min = '%.2f' % (commodity.min_price/100.0)
     pretty_price = '%.2f' % (price/100.0)
     SMS::notify phone, "Je order van: #{amount} #{commodity.name} voor #{pretty_price} euro per stuk is overboden, bied minstens #{pretty_min} euro per stuk."
+  end
+
+  def notify_close
+    return unless /316\d{8}/ =~ phone
+    pretty_price = '%.2f' % (price/100.0)
+    SMS::notify phone, "De markt is gesloten, hierom is je order van #{amount} #{commodity.name} voor #{pretty_price} euro per stuk geannuleerd. Beankt voor het handelen."
   end
 
 # Broadcast special states of the market to all clients
