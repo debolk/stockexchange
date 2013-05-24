@@ -249,8 +249,9 @@ put '/commodities/:name' do |name|
 
   begin
     commodity = Commodity.where(:name => name).first!
-    commodity.supply_rate = req["supply_rate"]
-    commodity.supply_price = req["supply_price"]
+    commodity.supply_rate = req['amount'].to_f/req['spread'].to_f
+    commodity.supply_price = req['price']
+    commodity.supply_amount = req['amount']
     unless commodity.save
       halt 412, commodity.errors.full_messages
     end

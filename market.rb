@@ -28,54 +28,30 @@ log 'Initializing market heartbeat...done'
 Thread.abort_on_exception = true
 
 @threads = []
-# Function to retrieve all updated commoditiesfa
-def get_commodities
-  uri = URI('http://localhost:3000/commodities?110F4B0BDF366C453723')
-  response = Net::HTTP.get_response(uri)
-  JSON.parse(response.body)
-end
-@commodities = get_commodities
-# Spawn a heartbeat for each commodity
-@commodities.each do |commodity|
+# Spawn a thread to add supply for each commodity
+Commodity.all.each do |commodity|
   @threads << Thread.new(commodity) do |commodity|
     while true
-      while commodity['supply_rate'].to_i == 0
+      commodity.reload
+
+      # Do not add supply when no supply is set
+      if commodity.supply_amount == 0 || commodity.supply_rate == 0
         sleep 1
+        next
       end
-      data = {
-        commodity: commodity['name'],
-        amount: 1,
-        price: commodity['supply_price'],
-        seller: 'bar',
-      }
-      http = Net::HTTP.new('localhost', '3000')
-      request = Net::HTTP::Post.new('/sell_orders?110F4B0BDF366C453723')
-      request.body = data.to_json
-      request["Content-Type"] = "application/json"
-      response = http.request(request)
+
+      # Create a sell order
+      SellOrder.create do |o|
+        o.commodity = commodity
+        o.price = commodity.supply_price
+        o.seller = 'bar'
+      end
+      commodity.update_attribute(:supply_amount, commodity.supply_amount-1)
       log "Added one #{commodity['name']} for #{commodity['supply_price']}"
-      if commodity['supply_rate'].to_i == 0
-        sleep 1
-      else  
-        sleep 60/commodity['supply_rate']
-      end
+
+      # Sleep for the next adding
+      sleep 60/commodity.supply_rate
     end
-  end
-end
-# Spawn a thread to update commodities
-@threads << Thread.new do
-  while true
-    for commodity in get_commodities
-      for old in @commodities
-        if old['name'] == commodity['name']
-          old['supply_rate'] = commodity['supply_rate'] 
-          old['supply_price'] = commodity['supply_price']
-          old['bar_price'] = commodity['bar_price']
-        end
-      end
-    end
-    log 'Commodities updated'
-    sleep 3
   end
 end
 
