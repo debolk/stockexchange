@@ -1,4 +1,6 @@
 $(document).ready(function(){
+  // Compile templates
+  var commodity_template = Handlebars.compile($("#commodity_template").html());
 
   // Load commodities
   $.getJSON('/commodities', function(commodities) {
@@ -24,4 +26,15 @@ $(document).ready(function(){
       },
     });
   });
+
+  // Populate and update statistics
+  window.update_statistics = function(){
+    $.getJSON('/commodities?110F4B0BDF366C453723', function(commodities) {
+      $('table tbody').empty();
+      $(commodities).each(function(){
+        $('table tbody').append(commodity_template(this));
+      });
+    });
+  };
+  setInterval('window.update_statistics()', 5000);
 });
