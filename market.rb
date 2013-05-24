@@ -50,7 +50,8 @@ Commodity.all.each do |commodity|
       log "Added one #{commodity['name']} for #{commodity['supply_price']}"
 
       # Sleep for the next adding
-      sleep 60/commodity.supply_rate
+      log commodity.supply_rate
+      sleep commodity.supply_rate
     end
   end
 end

@@ -254,7 +254,7 @@ put '/commodities/:name' do |name|
 
   begin
     commodity = Commodity.where(:name => name).first!
-    commodity.supply_rate = req['amount'].to_f/req['spread'].to_f
+    commodity.supply_rate = 60 * req['spread'].to_f/req['amount'].to_f
     commodity.supply_price = req['price']
     commodity.supply_amount = req['amount']
     unless commodity.save
