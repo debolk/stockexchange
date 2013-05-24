@@ -35,14 +35,35 @@ class BuyOrder < ActiveRecord::Base
     order('price DESC').where('state = ?', 'open')
   end
 
+  def notify_matched
+    return unless /316\d{8}/ =~ phone
+    total_price = (total_value/100.0)
+    pretty_total = '%.2f' % total_price
+    SMS::notify phone, "Je order staat klaar: #{amount} #{commodity.name} voor #{pretty_total} euro. Haal 'm snel op bij het loket."
+  end
+
+  def notify_overbid
+    return unless /316\d{8}/ =~ phone
+    pretty_min = '%.2f' % (commodity.min_price/100.0)
+    pretty_price = '%.2f' % (price/100.0)
+    SMS::notify phone, "Je order van: #{amount} #{commodity.name} voor #{pretty_price} euro per stuk is overboden, bied minstens #{pretty_min} euro per stuk."
+  end
+
+# Broadcast special states of the market to all clients
+
   private
 
   def remove_lowest_order
     Commodity.all.each do |commodity|
       to_be_destroyed = commodity.buy_orders.count - commodity.orderbook_size
       if to_be_destroyed > 0
-        commodity.buy_orders.order('price asc').limit(to_be_destroyed).destroy_all
+        lowest = commodity.buy_orders.order('price asc').limit(to_be_destroyed)
+        lowest.each do |bid|
+          bid.notify_overbid
+        end
+        lowest.delete_all
       end
     end
   end
+
 end

@@ -25,9 +25,9 @@ class Commodity < ActiveRecord::Base
     if orderbook_size < 1
       return ceiling_price
     end
-    min = buy_orders.where('state = ?', 'open').order('price DESC').offset(orderbook_size - 2)
+    min = buy_orders.where('state = ?', 'open').order('price DESC').offset(orderbook_size - 1)
     if !min.any?
-      return 0
+      return floor_price
     end
     return min.first.price + 10
   end
