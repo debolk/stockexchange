@@ -5,6 +5,7 @@
     %thead 
       %tr 
         %th Commodity
+        %th Naam
         %th.number Amount
         %th.number Price
     %tbody 
@@ -21,6 +22,7 @@
 %script#open_buy_order{type: 'text/x-handlebars-template'}
   %tr{'data-id' => '{{id}}'}
     %td {{commodity.name}}
+    %td {{owner}}
     %td.number {{amount}}
     %td.number {{money price}}
 
