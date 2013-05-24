@@ -5,6 +5,9 @@ $(document).ready(function(){
 
   // Load commodities
   $.getJSON('/commodities', function(commodities) {
+    window.load_orders();
+    
+    setInterval('window.load_orders()', 2000);
     $(commodities).each(function(){
       $('<option>').val(this.name).html(this.name).appendTo('#commodity');
     });
@@ -25,9 +28,6 @@ $(document).ready(function(){
       });
     });
   };
-  window.load_orders();
-  
-  setInterval('window.load_orders()', 2000);
   
   // Select all checkbox
   $('input.all').on('click', function(){
