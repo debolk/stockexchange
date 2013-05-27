@@ -1,8 +1,12 @@
 stockexchange
 =============
 
+## Description
+
 Software that was used to run the 42com-stock exchange for the 'zusjesfeest' at De Bolk on May 24th 2013. 
 Designed and build with love by Max Maton and Jakob Buis.
+
+## License
 
 Copyright 2013 Max Maton and Jakob Buis
 
